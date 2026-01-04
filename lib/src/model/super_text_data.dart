@@ -1,4 +1,4 @@
-part of '../super_text_library.dart';
+part of '../super_text_preview_library.dart';
 
 /// Enum for different text types
 enum SuperTextType {

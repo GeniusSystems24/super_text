@@ -1,4 +1,4 @@
-part of '../super_text_library.dart';
+part of '../super_text_preview_library.dart';
 
 /// Widget that displays text with clickable links, emails, phone numbers, and usernames
 class SuperTextPreview extends StatelessWidget {

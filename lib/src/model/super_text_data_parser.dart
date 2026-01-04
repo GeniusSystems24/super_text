@@ -1,4 +1,4 @@
-part of '../super_text_library.dart';
+part of '../super_text_preview_library.dart';
 
 /// Internal parser class that handles the text processing
 class SuperTextDataParser {
