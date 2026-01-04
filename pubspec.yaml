@@ -1,0 +1,18 @@
+name: super_text
+description: A powerful Flutter package for parsing and displaying text with interactive links, emails, phone numbers, usernames, hashtags, social media links, and internal app routes.
+version: 1.0.0
+homepage: https://github.com/geniussystems24/super_text
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  url_launcher: ^6.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0

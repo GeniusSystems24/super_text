@@ -1,0 +1,25 @@
+name: text_preview_example
+description: A comprehensive example showcasing all features of the super_text package.
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  super_text:
+    path: ../
+  google_fonts: ^6.1.0
+  flutter_animate: ^4.5.0
+  flutter_syntax_view: ^4.1.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
