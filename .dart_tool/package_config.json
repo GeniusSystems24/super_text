@@ -224,7 +224,7 @@
       "languageVersion": "3.4"
     },
     {
-      "name": "super_text",
+      "name": "super_interactive_text",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.0"
