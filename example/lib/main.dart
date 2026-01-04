@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
+import 'package:super_text/super_text.dart';
 import 'screens/home_screen.dart';
 import 'screens/basic_usage_screen.dart';
 import 'screens/custom_styling_screen.dart';
@@ -10,8 +11,91 @@ import 'screens/theming_screen.dart';
 import 'screens/real_world_screen.dart';
 import 'screens/social_media_screen.dart';
 import 'screens/interactive_demo_screen.dart';
+import 'screens/route_example_screen.dart';
+import 'utils.dart';
 
 void main() {
+  // Example of flexible route configuration
+  SuperTextDataParser.configure(
+    RouteConfig(
+      baseAddresses: ['https://flutter.dev'],
+      routes: [
+        RouteDefinition(
+          name: 'basic-screen',
+          pattern: r'basic$',
+          parameterNames: {},
+          onNavigate: (context, data) {
+            Navigator.pushNamed(context, '/basic');
+            showToast(context, 'Navigated to Basic Usage');
+          },
+        ),
+        RouteDefinition(
+          name: 'styling-screen',
+          pattern: r'styling$',
+          parameterNames: {},
+          onNavigate: (context, data) {
+            Navigator.pushNamed(context, '/styling');
+            showToast(context, 'Navigated to Custom Styling');
+          },
+        ),
+        RouteDefinition(
+          name: 'builder-screen',
+          pattern: r'builder$',
+          parameterNames: {},
+          onNavigate: (context, data) {
+            Navigator.pushNamed(context, '/builder');
+            showToast(context, 'Navigated to Builder Pattern');
+          },
+        ),
+        RouteDefinition(
+          name: 'theming-screen',
+          pattern: r'theming$',
+          parameterNames: {},
+          onNavigate: (context, data) {
+            Navigator.pushNamed(context, '/theming');
+            showToast(context, 'Navigated to Theming');
+          },
+        ),
+        RouteDefinition(
+          name: 'real-world-screen',
+          pattern: r'real-world$',
+          parameterNames: {},
+          onNavigate: (context, data) {
+            Navigator.pushNamed(context, '/real-world');
+            showToast(context, 'Navigated to Real World Example');
+          },
+        ),
+        RouteDefinition(
+          name: 'social-media-screen',
+          pattern: r'social-media$',
+          parameterNames: {},
+          onNavigate: (context, data) {
+            Navigator.pushNamed(context, '/social-media');
+            showToast(context, 'Navigated to Social Media');
+          },
+        ),
+        RouteDefinition(
+          name: 'interactive-screen',
+          pattern: r'interactive$',
+          parameterNames: {},
+          onNavigate: (context, data) {
+            Navigator.pushNamed(context, '/interactive');
+            showToast(context, 'Navigated to Interactive Demo');
+          },
+        ),
+        RouteDefinition(
+          name: 'route-screen',
+          pattern: r'routes$',
+          parameterNames: {},
+          onNavigate: (context, data) {
+            Navigator.pushNamed(context, '/routes');
+            showToast(context, 'Navigated to Route Examples');
+          },
+        ),
+      ],
+    ),
+  );
+
   runApp(const TextPreviewExampleApp());
 }
 
@@ -36,6 +120,7 @@ class TextPreviewExampleApp extends StatelessWidget {
         '/real-world': (context) => const RealWorldScreen(),
         '/social-media': (context) => const SocialMediaScreen(),
         '/interactive': (context) => const InteractiveDemoScreen(),
+        '/routes': (context) => const RouteExampleScreen(),
       },
     );
   }

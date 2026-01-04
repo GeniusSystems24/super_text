@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-01-04
+
+### Added
+- **Flexible Routing System**: Introduced `RouteConfig` and `RouteDefinition` to allow fully customizable internal route parsing.
+- `SuperTextDataParser.configure(RouteConfig)`: Method to initialize the parser with custom route patterns.
+- `onNavigate` parameter in `RouteDefinition`: Callback to handle navigation logic (e.g., `Navigator.pushNamed`) when a route is tapped.
+- `RouteTextData.navigate(BuildContext)`: Method to trigger the navigation callback.
+- `RouteTextData.routeDefinition`: Reference to the matched route definition.
+
+### Changed
+- **Breaking Change**: Removed the hardcoded `RouteType` enum and `RouteTextData.routeType`.
+- **Breaking Change**: `RouteTextData` constructor now requires `RouteDefinition` instead of `RouteType`.
+- `SuperTextPreview` widget now passes `BuildContext` to `_handleRouteTap` to support `onNavigate`.
+- `RouteTextData` serializes/deserializes using the configured `RouteConfig` to look up route definitions by name.
+
+### Removed
+- Static hardcoded route patterns in `SuperTextDataParser`.
+
 ## [1.0.0] - 2026-01-04
 
 ### Added

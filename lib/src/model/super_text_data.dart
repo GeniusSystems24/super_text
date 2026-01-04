@@ -64,14 +64,23 @@ abstract class SuperTextData {
           url: map['url'] ?? map['text'],
         );
       case SuperTextType.route:
-        return RouteTextData(
-          text: map['text'],
-          pathParameters: Map<String, String>.from(map['pathParameters'] ?? {}),
-          routeType: RouteType.values.firstWhere(
-            (e) => e.name == map['routeType'],
-            orElse: () => RouteType.home,
-          ),
-        );
+        final config = SuperTextDataParser.routeConfig;
+        final routeName = map['routeName'] as String?;
+
+        if (config != null && routeName != null) {
+          final definition = config.findByName(routeName);
+          if (definition != null) {
+            return RouteTextData(
+              text: map['text'],
+              routeDefinition: definition,
+              pathParameters: map['pathParameters'] != null
+                  ? Map<String, String>.from(map['pathParameters'])
+                  : {},
+              path: map['path'] ?? '',
+            );
+          }
+        }
+        return LinkTextData(text: map['text']);
       default:
         return NormalTextData(text: map['text']);
     }
@@ -90,8 +99,9 @@ abstract class SuperTextData {
       baseMap['url'] = socialMedia.url;
     } else if (this is RouteTextData) {
       final route = this as RouteTextData;
-      baseMap['pathParameters'] = route.pathParameters ?? <String, String>{};
-      baseMap['routeType'] = route.routeType.name;
+      baseMap['pathParameters'] = route.pathParameters;
+      baseMap['routeName'] = route.routeName;
+      baseMap['path'] = route.path;
     }
 
     return baseMap;
@@ -170,147 +180,33 @@ class HashtagTextData extends SuperTextData {
       : super(textType: SuperTextType.hashtag);
 }
 
-/// Enum for internal app route types based on router.dart
-enum RouteType {
-  // Authentication routes
-  home,
-  login,
-  signup,
-  waitingVerifying,
-  forgetPassword,
-  emailVerification,
-
-  // User management routes
-  userProfile,
-  userProfileEdit,
-  userPasswordEdit,
-  userEmailEdit,
-  userSocialMediaEdit,
-  userInterested,
-  userDetails,
-
-  // Club management routes
-  clubIndex,
-  clubCreate,
-  clubDetails,
-  clubEdit,
-  clubSettings,
-  clubBalance,
-  clubSubscription,
-  clubInviteLink,
-  clubSearch,
-
-  // Club content routes
-  clubAbout,
-  clubAboutModify,
-  clubContactUs,
-  clubContactUsDetails,
-  clubContactUsModify,
-  clubMassEmail,
-  clubPaymentCreate,
-  clubLogoModify,
-  clubMemberPolicyEdit,
-  clubNavConfigEdit,
-
-  // Club news routes
-  clubNewsIndex,
-  clubNewsModify,
-  clubNewsDetails,
-
-  // Club articles routes
-  clubArticlesIndex,
-  clubArticlesModify,
-  clubArticlesDetails,
-
-  // Club single articles routes
-  clubSingleArticlesIndex,
-  clubSingleArticlesModify,
-  clubSingleArticlesDetails,
-
-  // Club events routes
-  clubEventsIndex,
-  clubEventsModify,
-  clubEventsDetails,
-
-  // Club gallery routes
-  clubGalleryIndex,
-  clubGalleryModify,
-  clubGalleryDetails,
-  clubGalleryMediaAdd,
-  clubGalleryMediaDetails,
-
-  // Club groups routes
-  clubGroupsIndex,
-  clubGroupsModify,
-  clubGroupsDetails,
-  clubGroupMembersIndex,
-  clubGroupRoomsIndex,
-  clubGroupRoomsModify,
-  clubGroupRoomsDetails,
-  clubGroupRoomsChat,
-  clubGroupQuestionsIndex,
-  clubGroupQuestionsModify,
-  clubGroupQuestionsDetails,
-
-  // Club members routes
-  clubMembersIndex,
-  clubMembersDetails,
-  clubMemberJoinRequest,
-
-  // Club membership questions routes
-  clubMembershipQuestionsIndex,
-  clubMembershipQuestionsModify,
-  clubMembershipQuestionsAnswer,
-
-  // Club messages routes
-  clubMessagesIndex,
-  clubMessagesModify,
-  clubMessagesDetails,
-
-  // Chat routes
-  clubChatMessageIndex,
-  individualChatMessageIndex,
-  chatProfile,
-  clubChatMeeting,
-
-  // Task routes
-  clubChatTaskIndex,
-  clubChatTaskModify,
-  clubChatTaskDetails,
-
-  // Plan routes
-  planIndex,
-  planDetails,
-
-  // Category routes
-  categoryDetails,
-
-  // Notification routes
-  notificationIndex,
-
-  // App routes
-  introduction,
-  licenceAgreement,
-  appSettings,
-  appYoutubePlayer,
-  pdfReader,
-
-  // Other routes
-  interestedCategories,
-  phoneAuth,
-}
-
 /// Route text for internal app links
 class RouteTextData extends SuperTextData {
-  static const String appAddress = "https://clubapp3.page.link";
-  final Map<String, String>? pathParameters;
-  final RouteType routeType;
+  /// The matched route definition
+  final RouteDefinition routeDefinition;
 
-  String get path => text.replaceAll(appAddress, '');
+  /// Extracted path parameters
+  final Map<String, String> pathParameters;
+
+  /// Extracted query parameters
+  final Map<String, String>? queryParameters;
+
+  /// The path without base address
+  final String path;
 
   RouteTextData({
     required super.text,
-    this.pathParameters,
-    required this.routeType,
+    required this.routeDefinition,
+    required this.pathParameters,
+    required this.path,
+    this.queryParameters,
   }) : super(textType: SuperTextType.route);
+
+  /// Get the route name
+  String get routeName => routeDefinition.name;
+
+  /// Navigate using the route's onNavigate callback
+  void navigate(BuildContext context) {
+    routeDefinition.onNavigate?.call(context, this);
+  }
 }

@@ -119,7 +119,9 @@ class SuperTextPreview extends StatelessWidget {
 
     // Use provided parsed text or parse the raw text
     final List<SuperTextData> parsedData = parsedText ??
-        (text != null ? SuperTextData.parse(text!, save: true) : <SuperTextData>[]);
+        (text != null
+            ? SuperTextData.parse(text!, save: true)
+            : <SuperTextData>[]);
 
     if (parsedData.isEmpty) {
       final displayText = text ?? '';
@@ -148,6 +150,7 @@ class SuperTextPreview extends StatelessWidget {
             .map(
               (data) => _buildTextSpan(
                 data,
+                context,
                 theme,
                 defaultTextStyle,
                 textPreviewTheme,
@@ -188,6 +191,7 @@ class SuperTextPreview extends StatelessWidget {
             children: parsedData.map((data) {
               Widget? customWidget = _buildCustomWidget(
                 data,
+                context,
                 theme,
                 textPreviewTheme,
                 defaultTextStyle,
@@ -201,6 +205,7 @@ class SuperTextPreview extends StatelessWidget {
               } else {
                 return _buildTextSpan(
                   data,
+                  context,
                   theme,
                   defaultTextStyle,
                   textPreviewTheme,
@@ -216,6 +221,7 @@ class SuperTextPreview extends StatelessWidget {
   /// Build custom widget for each data type
   Widget? _buildCustomWidget(
     SuperTextData data,
+    BuildContext context,
     ThemeData theme,
     SuperTextPreviewTheme textPreviewTheme,
     TextStyle defaultStyle,
@@ -374,7 +380,8 @@ class SuperTextPreview extends StatelessWidget {
                 ),
             child: onRouteTap != null
                 ? GestureDetector(
-                    onTap: () => _handleRouteTap(data as RouteTextData),
+                    onTap: () =>
+                        _handleRouteTap(context, data as RouteTextData),
                     child: widget,
                   )
                 : widget,
@@ -390,6 +397,7 @@ class SuperTextPreview extends StatelessWidget {
   /// Build TextSpan for each data type
   TextSpan _buildTextSpan(
     SuperTextData data,
+    BuildContext context,
     ThemeData theme,
     TextStyle defaultStyle,
     SuperTextPreviewTheme textPreviewTheme,
@@ -501,7 +509,7 @@ class SuperTextPreview extends StatelessWidget {
                 decoration: TextDecoration.underline,
               ),
           recognizer: TapGestureRecognizer()
-            ..onTap = () => _handleRouteTap(routeData),
+            ..onTap = () => _handleRouteTap(context, routeData),
         );
 
       default:
@@ -599,9 +607,11 @@ class SuperTextPreview extends StatelessWidget {
   }
 
   /// Handle route tap
-  void _handleRouteTap(RouteTextData routeData) {
+  void _handleRouteTap(BuildContext context, RouteTextData routeData) {
     if (onRouteTap != null) {
       onRouteTap!(routeData);
+    } else if (routeData.routeDefinition.onNavigate != null) {
+      routeData.navigate(context);
     } else {
       // Default action: launch the route URL
       _launchUrl(routeData.text);

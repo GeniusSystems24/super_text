@@ -9,6 +9,8 @@ import 'theme/super_text_preview_theme.dart';
 
 export 'theme/super_text_preview_theme.dart';
 
+part 'model/route_definition.dart';
+part 'model/route_config.dart';
 part 'model/super_text_data.dart';
 part 'model/super_text_data_parser.dart';
 part 'widget/super_text_preview.dart';

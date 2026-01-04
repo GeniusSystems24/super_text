@@ -183,6 +183,15 @@ class HomeScreen extends StatelessWidget {
                   route: '/interactive',
                   delay: 300,
                 ),
+                _ExampleCard(
+                  title: 'التنقل في التطبيق',
+                  description:
+                      'اكشتف كيفية استخدام الروابط للتنقل داخل التطبيق',
+                  icon: Icons.directions_rounded,
+                  gradient: [const Color(0xFFFF6F00), const Color(0xFFFFB74D)],
+                  route: '/routes',
+                  delay: 350,
+                ),
               ]),
             ),
           ),

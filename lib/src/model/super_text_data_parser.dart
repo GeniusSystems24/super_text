@@ -22,11 +22,32 @@ class SuperTextDataParser {
 
   static final RegExp _hashtagRegex = RegExp(r'#[A-Za-z0-9_]+');
 
-  // Internal route regex pattern
-  static final RegExp _routeRegex = RegExp(
-    r'https://clubapp3\.page\.link/[^\s]*',
-    caseSensitive: false,
-  );
+  // Route configuration - must be set before parsing routes
+  static RouteConfig? _routeConfig;
+
+  /// Configure the parser with route definitions
+  static void configure(RouteConfig config) {
+    _routeConfig = config;
+    _parsedTexts.clear(); // Clear cache when config changes
+  }
+
+  /// Get the current route configuration
+  static RouteConfig? get routeConfig => _routeConfig;
+
+  // Dynamic route regex based on configured base addresses
+  static RegExp? get _routeRegex {
+    if (_routeConfig == null || _routeConfig!.baseAddresses.isEmpty) {
+      return null;
+    }
+    // Build regex pattern from base addresses
+    final escapedAddresses = _routeConfig!.baseAddresses
+        .map((addr) => RegExp.escape(addr))
+        .join('|');
+    return RegExp(
+      '($escapedAddresses)[^\\s]*',
+      caseSensitive: false,
+    );
+  }
 
   // Social media regex patterns
   static final RegExp _socialMediaRegex = RegExp(
@@ -94,20 +115,23 @@ class SuperTextDataParser {
     List<_Match> matches = [];
 
     // Find all internal route URLs first (most specific)
-    for (Match match in _routeRegex.allMatches(text)) {
-      String url = match.group(0)!;
-      RouteTextData? routeData = _parseRouteUrl(url);
-      // Only add as route if it matches a valid pattern, otherwise it will be handled as regular URL
-      if (routeData != null) {
-        matches.add(
-          _Match(
-            start: match.start,
-            end: match.end,
-            text: url,
-            type: _SegmentType.route,
-            routeData: routeData,
-          ),
-        );
+    final routeRegex = _routeRegex;
+    if (routeRegex != null) {
+      for (Match match in routeRegex.allMatches(text)) {
+        String url = match.group(0)!;
+        RouteTextData? routeData = _parseRouteUrl(url);
+        // Only add as route if it matches a valid pattern, otherwise it will be handled as regular URL
+        if (routeData != null) {
+          matches.add(
+            _Match(
+              start: match.start,
+              end: match.end,
+              text: url,
+              type: _SegmentType.route,
+              routeData: routeData,
+            ),
+          );
+        }
       }
     }
 
@@ -281,462 +305,21 @@ class SuperTextDataParser {
   /// Parse internal route URL and extract path parameters
   /// Returns null if the URL doesn't match any valid route pattern
   static RouteTextData? _parseRouteUrl(String url) {
-    // Remove the base URL to get the path
-    String path = url.replaceFirst('https://clubapp3.page.link/', '');
+    final config = _routeConfig;
+    if (config == null) return null;
 
-    // Handle empty path or just slash
-    if (path.isEmpty || path == '/') {
-      return RouteTextData(
-        text: url,
-        pathParameters: null,
-        routeType: RouteType.home,
-      );
-    }
+    // Try to match the URL against configured routes
+    final matchResult = config.matchUrl(url);
+    if (matchResult == null) return null;
 
-    // Remove trailing slash for consistent matching
-    if (path.endsWith('/') && path.length > 1) {
-      path = path.substring(0, path.length - 1);
-    }
-
-    // Define route patterns with their parameter names and route types
-    final List<_RoutePattern> patterns = [
-      // Static routes (no parameters)
-      _RoutePattern(r'^login$', [], RouteType.login),
-      _RoutePattern(r'^signup$', [], RouteType.signup),
-      _RoutePattern(r'^Clubs/create$', [], RouteType.clubCreate),
-      _RoutePattern(r'^Plans$', [], RouteType.planIndex),
-      _RoutePattern(r'^search$', [], RouteType.clubSearch),
-      _RoutePattern(r'^notification$', [], RouteType.notificationIndex),
-      _RoutePattern(
-        r'^interested-categories$',
-        [],
-        RouteType.interestedCategories,
-      ),
-      _RoutePattern(r'^forget-password$', [], RouteType.forgetPassword),
-      _RoutePattern(r'^phone-auth$', [], RouteType.phoneAuth),
-      _RoutePattern(r'^emailVerification$', [], RouteType.emailVerification),
-      _RoutePattern(r'^waiting-verifying$', [], RouteType.waitingVerifying),
-      _RoutePattern(r'^introduction$', [], RouteType.introduction),
-      _RoutePattern(r'^licence-agreement$', [], RouteType.licenceAgreement),
-      _RoutePattern(r'^app-setting$', [], RouteType.appSettings),
-      _RoutePattern(r'^pdf-reader$', [], RouteType.pdfReader),
-      _RoutePattern(r'^user/profile/edit$', [], RouteType.userProfileEdit),
-      _RoutePattern(r'^user/password/edit$', [], RouteType.userPasswordEdit),
-      _RoutePattern(r'^user/email/edit$', [], RouteType.userEmailEdit),
-      _RoutePattern(
-        r'^user/social-media-links/modify$',
-        [],
-        RouteType.userSocialMediaEdit,
-      ),
-
-      // Club routes
-      _RoutePattern(r'^Clubs/([^/]+)$', ['clubId'], RouteType.clubDetails),
-      _RoutePattern(r'^Clubs/([^/]+)/edit$', ['clubId'], RouteType.clubEdit),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/subscription$',
-          [
-            'clubId',
-          ],
-          RouteType.clubSubscription),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/settings$',
-          [
-            'clubId',
-          ],
-          RouteType.clubSettings),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/balance$',
-          [
-            'clubId',
-          ],
-          RouteType.clubBalance),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/contactus$',
-          [
-            'clubId',
-          ],
-          RouteType.clubContactUs),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/contactus/([^/]+)$',
-          [
-            'clubId',
-            'contactUsId',
-          ],
-          RouteType.clubContactUsDetails),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/contactus/modify$',
-          [
-            'clubId',
-          ],
-          RouteType.clubContactUsModify),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/ClubMessages$',
-          [
-            'clubId',
-          ],
-          RouteType.clubMessagesIndex),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/ClubMessages/modify$',
-          [
-            'clubId',
-          ],
-          RouteType.clubMessagesModify),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/ClubMessages/([^/]+)$',
-          [
-            'clubId',
-            'messageId',
-          ],
-          RouteType.clubMessagesDetails),
-      _RoutePattern(
-        r'^Clubs/([^/]+)/membership-questions$',
-        ['clubId'],
-        RouteType.clubMembershipQuestionsIndex,
-      ),
-      _RoutePattern(
-        r'^Clubs/([^/]+)/membership-questions/modify$',
-        ['clubId'],
-        RouteType.clubMembershipQuestionsModify,
-      ),
-      _RoutePattern(
-        r'^Clubs/([^/]+)/membership-questions/answer$',
-        ['clubId'],
-        RouteType.clubMembershipQuestionsAnswer,
-      ),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/mass-mail$',
-          [
-            'clubId',
-          ],
-          RouteType.clubMassEmail),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/payment/([^&]+)&([^/]+)$',
-          [
-            'clubId',
-            'isOneTimePayment',
-            'price',
-          ],
-          RouteType.clubPaymentCreate),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/edit-logo$',
-          [
-            'clubId',
-          ],
-          RouteType.clubLogoModify),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/edit-members-policies$',
-          [
-            'clubId',
-          ],
-          RouteType.clubMemberPolicyEdit),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/gallery$',
-          [
-            'clubId',
-          ],
-          RouteType.clubGalleryIndex),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/gallery/modify$',
-          [
-            'clubId',
-          ],
-          RouteType.clubGalleryModify),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/gallery/([^/]+)$',
-          [
-            'clubId',
-            'galleryId',
-          ],
-          RouteType.clubGalleryDetails),
-      _RoutePattern(
-        r'^Clubs/([^/]+)/gallery/([^/]+)/add-media$',
-        ['clubId', 'galleryId'],
-        RouteType.clubGalleryMediaAdd,
-      ),
-      _RoutePattern(
-        r'^Clubs/([^/]+)/gallery/([^/]+)/media/([^/]+)$',
-        ['clubId', 'galleryId', 'mediaId'],
-        RouteType.clubGalleryMediaDetails,
-      ),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/invite$',
-          [
-            'clubId',
-          ],
-          RouteType.clubInviteLink),
-      _RoutePattern(r'^Clubs/([^/]+)/about$', ['clubId'], RouteType.clubAbout),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/about/modify$',
-          [
-            'clubId',
-          ],
-          RouteType.clubAboutModify),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/nav$',
-          [
-            'clubId',
-          ],
-          RouteType.clubNavConfigEdit),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/ClubMembers$',
-          [
-            'clubId',
-          ],
-          RouteType.clubMembersIndex),
-      _RoutePattern(
-        r'^Clubs/([^/]+)/ClubMembers/join-request$',
-        ['clubId'],
-        RouteType.clubMemberJoinRequest,
-      ),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/ClubMembers/([^/]+)$',
-          [
-            'clubId',
-            'memberId',
-          ],
-          RouteType.clubMembersDetails),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/News$',
-          [
-            'clubId',
-          ],
-          RouteType.clubNewsIndex),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/News/modify$',
-          [
-            'clubId',
-          ],
-          RouteType.clubNewsModify),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/News/([^/]+)$',
-          [
-            'clubId',
-            'newsId',
-          ],
-          RouteType.clubNewsDetails),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/Articles$',
-          [
-            'clubId',
-          ],
-          RouteType.clubArticlesIndex),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/Articles/modify$',
-          [
-            'clubId',
-          ],
-          RouteType.clubArticlesModify),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/Articles/([^/]+)$',
-          [
-            'clubId',
-            'articleId',
-          ],
-          RouteType.clubArticlesDetails),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/single-articles$',
-          [
-            'clubId',
-          ],
-          RouteType.clubSingleArticlesIndex),
-      _RoutePattern(
-        r'^Clubs/([^/]+)/single-articles/modify$',
-        ['clubId'],
-        RouteType.clubSingleArticlesModify,
-      ),
-      _RoutePattern(
-        r'^Clubs/([^/]+)/single-articles/([^/]+)$',
-        ['clubId', 'articleId'],
-        RouteType.clubSingleArticlesDetails,
-      ),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/Events$',
-          [
-            'clubId',
-          ],
-          RouteType.clubEventsIndex),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/Events/modify$',
-          [
-            'clubId',
-          ],
-          RouteType.clubEventsModify),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/Events/([^/]+)$',
-          [
-            'clubId',
-            'eventId',
-          ],
-          RouteType.clubEventsDetails),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/Groups$',
-          [
-            'clubId',
-          ],
-          RouteType.clubGroupsIndex),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/Groups/modify/([^/]+)$',
-          [
-            'clubId',
-            'type',
-          ],
-          RouteType.clubGroupsModify),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/Groups/([^/]+)$',
-          [
-            'clubId',
-            'groupId',
-          ],
-          RouteType.clubGroupsDetails),
-      _RoutePattern(
-        r'^Clubs/([^/]+)/Groups/([^/]+)/Members$',
-        ['clubId', 'groupId'],
-        RouteType.clubGroupMembersIndex,
-      ),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/Groups/([^/]+)/Rooms$',
-          [
-            'clubId',
-            'groupId',
-          ],
-          RouteType.clubGroupRoomsIndex),
-      _RoutePattern(
-        r'^Clubs/([^/]+)/Groups/([^/]+)/Rooms/modify$',
-        ['clubId', 'groupId'],
-        RouteType.clubGroupRoomsModify,
-      ),
-      _RoutePattern(
-        r'^Clubs/([^/]+)/Groups/([^/]+)/Rooms/([^/]+)$',
-        ['clubId', 'groupId', 'roomId'],
-        RouteType.clubGroupRoomsDetails,
-      ),
-      _RoutePattern(
-        r'^Clubs/([^/]+)/Groups/([^/]+)/Rooms/([^/]+)/chat$',
-        ['clubId', 'groupId', 'roomId'],
-        RouteType.clubGroupRoomsChat,
-      ),
-      _RoutePattern(
-        r'^Clubs/([^/]+)/Groups/([^/]+)/Rooms/([^/]+)/chat/Meeting$',
-        ['clubId', 'groupId', 'roomId'],
-        RouteType.clubChatMeeting,
-      ),
-      _RoutePattern(
-          r'^Clubs/([^/]+)/Groups/questions$',
-          [
-            'clubId',
-          ],
-          RouteType.clubGroupQuestionsIndex),
-      _RoutePattern(
-        r'^Clubs/([^/]+)/Groups/questions/modify$',
-        ['clubId'],
-        RouteType.clubGroupQuestionsModify,
-      ),
-      _RoutePattern(
-        r'^Clubs/([^/]+)/Groups/questions/([^/]+)$',
-        ['clubId', 'questionId'],
-        RouteType.clubGroupQuestionsDetails,
-      ),
-
-      // Chat routes
-      _RoutePattern(
-          r'^Chats/([^/]+)$',
-          [
-            'chatId',
-          ],
-          RouteType.clubChatMessageIndex),
-      _RoutePattern(
-          r'^Chats/([^/]+)/Tasks$',
-          [
-            'chatId',
-          ],
-          RouteType.clubChatTaskIndex),
-      _RoutePattern(
-          r'^Chats/([^/]+)/Tasks/modify$',
-          [
-            'chatId',
-          ],
-          RouteType.clubChatTaskModify),
-      _RoutePattern(
-          r'^Chats/([^/]+)/Tasks/([^/]+)$',
-          [
-            'chatId',
-            'taskId',
-          ],
-          RouteType.clubChatTaskDetails),
-      _RoutePattern(
-          r'^IndividualChat/([^/]+)$',
-          [
-            'chatId',
-          ],
-          RouteType.individualChatMessageIndex),
-      _RoutePattern(
-          r'^IndividualChat/([^/]+)/profile$',
-          [
-            'chatId',
-          ],
-          RouteType.chatProfile),
-
-      // Other routes
-      _RoutePattern(r'^Plans/([^/]+)$', ['planId'], RouteType.planDetails),
-      _RoutePattern(
-          r'^Category/([^/]+)$',
-          [
-            'categoryId',
-          ],
-          RouteType.categoryDetails),
-      _RoutePattern(
-          r'^app-youtube-player-iframe/([^/]+)$',
-          [
-            'url',
-          ],
-          RouteType.appYoutubePlayer),
-      _RoutePattern(
-          r'^users/([^/]+)/profile$',
-          [
-            'userId',
-          ],
-          RouteType.userProfile),
-      _RoutePattern(r'^users/([^/]+)$', ['userId'], RouteType.userDetails),
-      _RoutePattern(
-          r'^users/([^/]+)/interested$',
-          [
-            'userId',
-          ],
-          RouteType.userInterested),
-    ];
-
-    Map<String, String> pathParameters = {};
-    RouteType? routeType;
-    bool matchFound = false;
-
-    // Try to match against known patterns
-    for (_RoutePattern pattern in patterns) {
-      RegExp regex = RegExp(pattern.pattern);
-      Match? match = regex.firstMatch(path);
-      if (match != null) {
-        matchFound = true;
-        routeType = pattern.routeType;
-        for (int i = 0;
-            i < pattern.parameterNames.length && i < match.groupCount;
-            i++) {
-          String? value = match.group(i + 1);
-          if (value != null) {
-            pathParameters[pattern.parameterNames[i]] = value;
-          }
-        }
-        break;
-      }
-    }
-
-    // Return null if no pattern matched - this will cause the URL to be treated as external
-    if (!matchFound || routeType == null) {
-      return null;
-    }
+    final (routeDefinition, pathParameters) = matchResult;
+    final path = config.extractPath(url) ?? '';
 
     return RouteTextData(
       text: url,
-      pathParameters: pathParameters.isNotEmpty ? pathParameters : null,
-      routeType: routeType,
+      routeDefinition: routeDefinition,
+      pathParameters: pathParameters,
+      path: path,
     );
   }
 
@@ -841,13 +424,4 @@ enum _SegmentType {
   socialMedia,
   hashtag,
   route,
-}
-
-/// Internal class to represent a route pattern
-class _RoutePattern {
-  final String pattern;
-  final List<String> parameterNames;
-  final RouteType routeType;
-
-  _RoutePattern(this.pattern, this.parameterNames, this.routeType);
 }
