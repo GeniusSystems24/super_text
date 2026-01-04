@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:super_text/super_text.dart';
+import 'package:super_interactive_text/super_interactive_text.dart';
 
 class SocialMediaScreen extends StatelessWidget {
   const SocialMediaScreen({super.key});
@@ -66,9 +66,8 @@ Subscribe: @FlutterChannel
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(title: const Text('وسائل التواصل')),
+      appBar: AppBar(title: const Text('Social Media')),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: _socialPosts.length,
@@ -168,7 +167,7 @@ class _SocialPostCard extends StatelessWidget {
           // Content
           Padding(
             padding: const EdgeInsets.all(16),
-            child: SuperTextPreview(
+            child: SuperInteractiveTextPreview(
               text: post.content,
               linkTextStyle: TextStyle(
                 color: post.color,
@@ -191,13 +190,13 @@ class _SocialPostCard extends StatelessWidget {
                 color: post.color.withOpacity(0.8),
                 fontWeight: FontWeight.w600,
               ),
-              onLinkTap: (link) => _showAction(context, 'فتح: ${link.text}'),
+              onLinkTap: (link) => _showAction(context, 'Open: ${link.text}'),
               onEmailTap: (email) =>
-                  _showAction(context, 'بريد: ${email.text}'),
+                  _showAction(context, 'Mail: ${email.text}'),
               onPhoneTap: (phone) =>
-                  _showAction(context, 'اتصال: ${phone.text}'),
-              onUsernameTap: (u) => _showAction(context, 'عرض: ${u.text}'),
-              onHashtagTap: (h) => _showAction(context, 'بحث: ${h.text}'),
+                  _showAction(context, 'Call: ${phone.text}'),
+              onUsernameTap: (u) => _showAction(context, 'View: ${u.text}'),
+              onHashtagTap: (h) => _showAction(context, 'Search: ${h.text}'),
             ),
           ),
           // Actions
@@ -225,7 +224,7 @@ class _SocialPostCard extends StatelessWidget {
                   ),
                 _ActionButton(
                   icon: Icons.share_outlined,
-                  label: 'مشاركة',
+                  label: 'Share',
                   color: colorScheme.primary,
                 ),
               ],

@@ -1,4 +1,4 @@
-part of '../super_text_preview_library.dart';
+part of '../super_interactive_text_preview_library.dart';
 
 /// Configuration for route matching in the application
 /// Contains base addresses and route definitions

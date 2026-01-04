@@ -1,5 +1,5 @@
 name: text_preview_example
-description: A comprehensive example showcasing all features of the super_text package.
+description: A comprehensive example showcasing all features of the super_interactive_text package.
 publish_to: 'none'
 version: 1.0.0
 
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  super_text:
+  super_interactive_text:
     path: ../
   google_fonts: ^6.1.0
   flutter_animate: ^4.5.0

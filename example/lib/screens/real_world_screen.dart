@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:super_text/super_text.dart';
+import 'package:super_interactive_text/super_interactive_text.dart';
 
 class RealWorldScreen extends StatefulWidget {
   const RealWorldScreen({super.key});
@@ -12,35 +12,34 @@ class RealWorldScreen extends StatefulWidget {
 class _RealWorldScreenState extends State<RealWorldScreen> {
   final _messages = <_ChatMessage>[
     _ChatMessage(
-      sender: 'أحمد',
+      sender: 'Ahmed',
       text:
-          'مرحباً! هل رأيت المشروع الجديد؟ https://github.com/flutter/flutter',
+          'Hello! Have you seen the new project? https://github.com/flutter/flutter',
       isMe: false,
-      time: '10:30 ص',
-      avatar: 'أ',
+      time: '10:30 AM',
+      avatar: 'A',
     ),
     _ChatMessage(
-      sender: 'أنت',
-      text: 'نعم! رائع جداً 🔥',
+      sender: 'You',
+      text: 'Yes! It is amazing 🔥',
       isMe: true,
-      time: '10:32 ص',
-      avatar: 'ي',
+      time: '10:32 AM',
+      avatar: 'Y',
     ),
     _ChatMessage(
-      sender: 'أحمد',
+      sender: 'Ahmed',
       text:
-          'حسناً، إليك التفاصيل:\n📧 dev@flutter.io\n📱 +966501234567\n👤 @flutter_team',
+          'Okay, here are the details:\n📧 dev@flutter.io\n📱 +966501234567\n👤 @flutter_team',
       isMe: false,
-      time: '10:35 ص',
-      avatar: 'أ',
+      time: '10:35 AM',
+      avatar: 'A',
     ),
     _ChatMessage(
-      sender: 'سارة',
-      text:
-          'أهلاً 👋\nhttps://flutter.dev\ncontact@example.com\n#flutter #dart',
+      sender: 'Sarah',
+      text: 'Hi 👋\nhttps://flutter.dev\ncontact@example.com\n#flutter #dart',
       isMe: false,
-      time: '10:40 ص',
-      avatar: 'س',
+      time: '10:40 AM',
+      avatar: 'S',
     ),
   ];
 
@@ -56,11 +55,11 @@ class _RealWorldScreenState extends State<RealWorldScreen> {
     if (_controller.text.trim().isEmpty) return;
     setState(() {
       _messages.add(_ChatMessage(
-        sender: 'أنت',
+        sender: 'You',
         text: _controller.text,
         isMe: true,
-        time: 'الآن',
-        avatar: 'ي',
+        time: 'Now',
+        avatar: 'Y',
       ));
       _controller.clear();
     });
@@ -78,7 +77,7 @@ class _RealWorldScreenState extends State<RealWorldScreen> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('محادثة تفاعلية')),
+      appBar: AppBar(title: const Text('Interactive Chat')),
       body: Column(
         children: [
           Expanded(
@@ -89,11 +88,11 @@ class _RealWorldScreenState extends State<RealWorldScreen> {
                 final message = _messages[index];
                 return _ChatBubble(
                   message: message,
-                  onLinkTap: (l) => _showSnackBar('رابط: ${l.text}'),
-                  onEmailTap: (e) => _showSnackBar('بريد: ${e.text}'),
-                  onPhoneTap: (p) => _showSnackBar('هاتف: ${p.text}'),
-                  onUsernameTap: (u) => _showSnackBar('مستخدم: ${u.text}'),
-                  onHashtagTap: (h) => _showSnackBar('هاشتاغ: ${h.text}'),
+                  onLinkTap: (l) => _showSnackBar('Link: ${l.text}'),
+                  onEmailTap: (e) => _showSnackBar('Mail: ${e.text}'),
+                  onPhoneTap: (p) => _showSnackBar('Phone: ${p.text}'),
+                  onUsernameTap: (u) => _showSnackBar('User: ${u.text}'),
+                  onHashtagTap: (h) => _showSnackBar('Hashtag: ${h.text}'),
                 ).animate().fadeIn(duration: 300.ms);
               },
             ),
@@ -107,7 +106,7 @@ class _RealWorldScreenState extends State<RealWorldScreen> {
                   child: TextField(
                     controller: _controller,
                     decoration: InputDecoration(
-                      hintText: 'اكتب رسالة...',
+                      hintText: 'Type a message...',
                       filled: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
@@ -195,7 +194,7 @@ class _ChatBubble extends StatelessWidget {
                             color: colorScheme.primary,
                             fontWeight: FontWeight.bold,
                             fontSize: 12)),
-                  SuperTextPreview(
+                  SuperInteractiveTextPreview(
                     text: message.text,
                     normalTextStyle: TextStyle(
                       color: message.isMe

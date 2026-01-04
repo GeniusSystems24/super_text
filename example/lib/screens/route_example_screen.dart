@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:super_text/super_text.dart';
+import 'package:super_interactive_text/super_interactive_text.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../widgets/example_card.dart';
 
@@ -18,30 +18,30 @@ class RouteExampleScreen extends StatelessWidget {
           const InfoCard(
             title: 'Internal Routing',
             description:
-                'SuperTextPreview can detect internal app routes and navigate to them directly within your app.',
+                'SuperInteractiveTextPreview can detect internal app routes and navigate to them directly within your app.',
           ).animate().fadeIn(duration: 300.ms).slideX(begin: -0.1),
           const SizedBox(height: 16),
           ExampleCard(
             title: 'Navigation Links',
             description: 'Click these links to navigate to other screens',
-            code: '''SuperTextPreview(
+            code: '''SuperInteractiveTextPreview(
   text: \'\'\'Try these routes:
-- Basic Usage: https://flutter.dev/basic
-- Custom Styling: https://flutter.dev/styling
-- Builder Pattern: https://flutter.dev/builder
-- Interactive Demo: https://flutter.dev/interactive
-- Fluter docs: https://flutter.dev/docs\'\'\',
+- Basic Usage: https://MyApp.com/basic
+- Custom Styling: https://MyApp.com/styling
+- Builder Pattern: https://MyApp.com/builder
+- Interactive Demo: https://MyApp.com/interactive
+- Fluter docs: https://MyApp.com/docs\'\'\',
 )''',
-            preview: const SuperTextPreview(
+            preview: const SuperInteractiveTextPreview(
               text: '''Try these routes:
-- Basic Usage: https://flutter.dev/basic
-- Custom Styling: https://flutter.dev/styling
-- Builder Pattern: https://flutter.dev/builder
-- Theming: https://flutter.dev/theming
-- Real World: https://flutter.dev/real-world
-- Social Media: https://flutter.dev/social-media
-- Interactive Demo: https://flutter.dev/interactive
-- Fluter docs: https://flutter.dev/docs''',
+- Basic Usage: https://MyApp.com/basic
+- Custom Styling: https://MyApp.com/styling
+- Builder Pattern: https://MyApp.com/builder
+- Theming: https://MyApp.com/theming
+- Real World: https://MyApp.com/real-world
+- Social Media: https://MyApp.com/social-media
+- Interactive Demo: https://MyApp.com/interactive
+- Fluter docs: https://MyApp.com/docs''',
             ),
           )
               .animate()
@@ -51,8 +51,8 @@ class RouteExampleScreen extends StatelessWidget {
           ExampleCard(
             title: 'Custom Route Styling',
             description: 'Routes can be styled differently from regular links',
-            code: '''SuperTextPreview(
-  text: 'Go to https://flutter.dev/styling settings',
+            code: '''SuperInteractiveTextPreview(
+  text: 'Go to https://MyApp.com/styling settings',
   routeTextStyle: TextStyle(
     color: Colors.deepOrange,
     fontWeight: FontWeight.bold,
@@ -60,8 +60,8 @@ class RouteExampleScreen extends StatelessWidget {
     decorationStyle: TextDecorationStyle.dashed,
   ),
 )''',
-            preview: const SuperTextPreview(
-              text: 'Go to https://flutter.dev/styling settings',
+            preview: const SuperInteractiveTextPreview(
+              text: 'Go to https://MyApp.com/styling settings',
               routeTextStyle: TextStyle(
                 color: Colors.deepOrange,
                 fontWeight: FontWeight.bold,

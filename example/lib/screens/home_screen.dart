@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -15,11 +16,32 @@ class HomeScreen extends StatelessWidget {
           SliverAppBar.large(
             expandedHeight: 200,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(
-                'Text Preview',
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  color: colorScheme.onSurface,
-                ),
+              title: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Super Interactive Text',
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      // open package pub.dev link
+                      launchUrl(Uri.parse(
+                          'https://pub.dev/packages/super_interactive_text'));
+                    },
+                    child: Text(
+                      'Flutter Package',
+                      style: TextStyle(
+                        color: Colors.white.withValues(
+                          alpha: 0.8,
+                        ),
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               background: Container(
                 decoration: BoxDecoration(
@@ -98,14 +120,14 @@ class HomeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'مرحباً بك في مكتبة Text Preview',
+                    'Welcome to Super Interactive Text Library',
                     style: theme.textTheme.titleLarge?.copyWith(
                       color: colorScheme.primary,
                     ),
                   ).animate().fadeIn(duration: 400.ms).slideX(begin: -0.1),
                   const SizedBox(height: 8),
                   Text(
-                    'اكتشف قوة تحويل النصوص إلى عناصر تفاعلية قابلة للنقر',
+                    'Discover the power of converting text into interactive clickable elements',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: colorScheme.onSurfaceVariant,
                     ),
@@ -128,16 +150,18 @@ class HomeScreen extends StatelessWidget {
               ),
               delegate: SliverChildListDelegate([
                 _ExampleCard(
-                  title: 'الاستخدام الأساسي',
-                  description: 'تعلم كيفية استخدام SuperTextPreview بأبسط صورة',
+                  title: 'Basic Usage',
+                  description:
+                      'Learn the simplest way to use SuperInteractiveTextPreview',
                   icon: Icons.play_arrow_rounded,
                   gradient: [const Color(0xFF6750A4), const Color(0xFF9747FF)],
                   route: '/basic',
                   delay: 0,
                 ),
                 _ExampleCard(
-                  title: 'التنسيق المخصص',
-                  description: 'تخصيص ألوان وأنماط النصوص المختلفة',
+                  title: 'Custom Styling',
+                  description:
+                      'Customize colors and styles for different text types',
                   icon: Icons.palette_rounded,
                   gradient: [const Color(0xFF00897B), const Color(0xFF4DB6AC)],
                   route: '/styling',
@@ -145,48 +169,51 @@ class HomeScreen extends StatelessWidget {
                 ),
                 _ExampleCard(
                   title: 'Builder Pattern',
-                  description: 'إنشاء عناصر مخصصة لكل نوع من البيانات',
+                  description: 'Create custom widgets for each data type',
                   icon: Icons.build_rounded,
                   gradient: [const Color(0xFFE65100), const Color(0xFFFF9800)],
                   route: '/builder',
                   delay: 100,
                 ),
                 _ExampleCard(
-                  title: 'التخصيص بالثيمات',
-                  description: 'استخدام SuperTextPreviewTheme للتحكم الكامل',
+                  title: 'Theming',
+                  description:
+                      'Use SuperInteractiveTextPreviewTheme for full control',
                   icon: Icons.auto_awesome_rounded,
                   gradient: [const Color(0xFF1565C0), const Color(0xFF42A5F5)],
                   route: '/theming',
                   delay: 150,
                 ),
                 _ExampleCard(
-                  title: 'مثال واقعي',
-                  description: 'محاكاة تطبيق دردشة حقيقي مع رسائل تفاعلية',
+                  title: 'Real World Example',
+                  description:
+                      'Simulate a real chat app with interactive messages',
                   icon: Icons.chat_rounded,
                   gradient: [const Color(0xFFC2185B), const Color(0xFFF48FB1)],
                   route: '/real-world',
                   delay: 200,
                 ),
                 _ExampleCard(
-                  title: 'وسائل التواصل',
-                  description: 'عرض روابط التواصل الاجتماعي بشكل جذاب',
+                  title: 'Social Media',
+                  description: 'Display social media links attractively',
                   icon: Icons.share_rounded,
                   gradient: [const Color(0xFF5C6BC0), const Color(0xFF9FA8DA)],
                   route: '/social-media',
                   delay: 250,
                 ),
                 _ExampleCard(
-                  title: 'عرض تفاعلي',
-                  description: 'جرب إدخال نصك الخاص وشاهد النتيجة مباشرة',
+                  title: 'Interactive Demo',
+                  description:
+                      'Try entering your own text and see changes live',
                   icon: Icons.edit_note_rounded,
                   gradient: [const Color(0xFF7B1FA2), const Color(0xFFBA68C8)],
                   route: '/interactive',
                   delay: 300,
                 ),
                 _ExampleCard(
-                  title: 'التنقل في التطبيق',
+                  title: 'App Navigation',
                   description:
-                      'اكشتف كيفية استخدام الروابط للتنقل داخل التطبيق',
+                      'Discover how to use links to navigate within the app',
                   icon: Icons.directions_rounded,
                   gradient: [const Color(0xFFFF6F00), const Color(0xFFFFB74D)],
                   route: '/routes',
@@ -337,7 +364,7 @@ class _FeaturesSection extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Text(
-                'المميزات الرئيسية',
+                'Key Features',
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -349,14 +376,14 @@ class _FeaturesSection extends StatelessWidget {
             spacing: 8,
             runSpacing: 8,
             children: [
-              _FeatureChip(label: '🔗 روابط', color: colorScheme.primary),
-              _FeatureChip(label: '📧 إيميلات', color: colorScheme.secondary),
-              _FeatureChip(label: '📱 هواتف', color: Colors.green),
-              _FeatureChip(label: '👤 أسماء مستخدمين', color: Colors.blue),
-              _FeatureChip(label: '#️⃣ هاشتاغ', color: Colors.purple),
-              _FeatureChip(label: '🌐 وسائل تواصل', color: Colors.pink),
-              _FeatureChip(label: '🏠 روابط داخلية', color: Colors.orange),
-              _FeatureChip(label: '💾 تسلسل البيانات', color: Colors.teal),
+              _FeatureChip(label: '🔗 Links', color: colorScheme.primary),
+              _FeatureChip(label: '📧 Emails', color: colorScheme.secondary),
+              _FeatureChip(label: '📱 Phones', color: Colors.green),
+              _FeatureChip(label: '👤 Usernames', color: Colors.blue),
+              _FeatureChip(label: '#️⃣ Hashtags', color: Colors.purple),
+              _FeatureChip(label: '🌐 Social Media', color: Colors.pink),
+              _FeatureChip(label: '🏠 Internal Routes', color: Colors.orange),
+              _FeatureChip(label: '💾 Data Serialization', color: Colors.teal),
             ],
           ),
         ],

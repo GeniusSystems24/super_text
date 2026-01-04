@@ -1,0 +1,16 @@
+import 'dart:core';
+
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'theme/super_interactive_text_preview_theme.dart';
+
+export 'theme/super_interactive_text_preview_theme.dart';
+
+part 'model/route_definition.dart';
+part 'model/route_config.dart';
+part 'model/super_interactive_text_data.dart';
+part 'model/super_interactive_text_data_parser.dart';
+part 'widget/super_interactive_text_preview.dart';

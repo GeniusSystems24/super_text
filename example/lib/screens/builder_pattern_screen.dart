@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:super_text/super_text.dart';
+import 'package:super_interactive_text/super_interactive_text.dart';
 
 import '../widgets/example_card.dart';
 
@@ -32,7 +32,7 @@ class BuilderPatternScreen extends StatelessWidget {
           ExampleCard(
             title: '1. Link as Chip',
             description: 'Transform links into clickable chip elements',
-            code: '''SuperTextPreview.builder(
+            code: '''SuperInteractiveTextPreview.builder(
   text: 'Visit https://flutter.dev for more',
   linkBuilder: (link) => Container(
     margin: EdgeInsets.symmetric(horizontal: 4),
@@ -51,7 +51,7 @@ class BuilderPatternScreen extends StatelessWidget {
     ),
   ),
 )''',
-            preview: SuperTextPreview.builder(
+            preview: SuperInteractiveTextPreview.builder(
               text: 'Visit https://flutter.dev for more info',
               linkBuilder: (link) => Container(
                 margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -96,7 +96,7 @@ class BuilderPatternScreen extends StatelessWidget {
           ExampleCard(
             title: '2. Email with Icon',
             description: 'Add an email icon next to email addresses',
-            code: '''SuperTextPreview.builder(
+            code: '''SuperInteractiveTextPreview.builder(
   text: 'Contact us at support@company.com',
   emailBuilder: (email) => Container(
     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -116,7 +116,7 @@ class BuilderPatternScreen extends StatelessWidget {
     ),
   ),
 )''',
-            preview: SuperTextPreview.builder(
+            preview: SuperInteractiveTextPreview.builder(
               text: 'Contact us at support@company.com',
               emailBuilder: (email) => Container(
                 margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -155,7 +155,7 @@ class BuilderPatternScreen extends StatelessWidget {
           ExampleCard(
             title: '3. Phone with Call Button',
             description: 'Transform phone numbers into call buttons',
-            code: '''SuperTextPreview.builder(
+            code: '''SuperInteractiveTextPreview.builder(
   text: 'Call us at +966501234567',
   phoneBuilder: (phone) => Container(
     decoration: BoxDecoration(
@@ -180,7 +180,7 @@ class BuilderPatternScreen extends StatelessWidget {
     ),
   ),
 )''',
-            preview: SuperTextPreview.builder(
+            preview: SuperInteractiveTextPreview.builder(
               text: 'Call us at +966501234567',
               phoneBuilder: (phone) => Container(
                 margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -236,7 +236,7 @@ class BuilderPatternScreen extends StatelessWidget {
           ExampleCard(
             title: '4. Username with Avatar',
             description: 'Display usernames with an avatar',
-            code: '''SuperTextPreview.builder(
+            code: '''SuperInteractiveTextPreview.builder(
   text: 'Follow @flutter_dev on Twitter',
   usernameBuilder: (username) => Container(
     padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -257,7 +257,7 @@ class BuilderPatternScreen extends StatelessWidget {
     ),
   ),
 )''',
-            preview: SuperTextPreview.builder(
+            preview: SuperInteractiveTextPreview.builder(
               text: 'Follow @flutter_dev on Twitter',
               usernameBuilder: (username) => Container(
                 margin: const EdgeInsets.symmetric(horizontal: 2),
@@ -305,7 +305,7 @@ class BuilderPatternScreen extends StatelessWidget {
           ExampleCard(
             title: '5. Hashtag Badges',
             description: 'Convert hashtags into colorful badge elements',
-            code: '''SuperTextPreview.builder(
+            code: '''SuperInteractiveTextPreview.builder(
   text: 'We share #FlutterDev and #Dart content',
   hashtagBuilder: (hashtag) => Container(
     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -321,7 +321,7 @@ class BuilderPatternScreen extends StatelessWidget {
     ),
   ),
 )''',
-            preview: SuperTextPreview.builder(
+            preview: SuperInteractiveTextPreview.builder(
               text: 'We share #FlutterDev and #Dart and #MobileDev content',
               hashtagBuilder: (hashtag) => Container(
                 margin: const EdgeInsets.symmetric(horizontal: 2),

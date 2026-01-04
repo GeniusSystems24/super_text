@@ -116,7 +116,7 @@ class RouteConfig {
 ### 3. تحديث `RouteTextData`
 
 ```dart
-class RouteTextData extends SuperTextData {
+class RouteTextData extends SuperInteractiveTextData {
   /// تعريف الراوتر المطابق
   final RouteDefinition routeDefinition;
   
@@ -170,7 +170,7 @@ final routeConfig = RouteConfig(
 );
 
 // تمرير الإعدادات للـ parser
-SuperTextDataParser.configure(routeConfig);
+SuperInteractiveTextDataParser.configure(routeConfig);
 ```
 
 ---

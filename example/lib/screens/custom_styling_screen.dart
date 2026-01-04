@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
-import 'package:super_text/super_text.dart';
+import 'package:super_interactive_text/super_interactive_text.dart';
 
 class CustomStylingScreen extends StatefulWidget {
   const CustomStylingScreen({super.key});
@@ -155,7 +155,7 @@ Follow @official_account
                         padding: const EdgeInsets.all(20),
                         child: AnimatedSwitcher(
                           duration: const Duration(milliseconds: 300),
-                          child: SuperTextPreview(
+                          child: SuperInteractiveTextPreview(
                             key: ValueKey(_selectedStyle),
                             text: _sampleText,
                             linkTextStyle: TextStyle(
@@ -257,7 +257,7 @@ Follow @official_account
   }
 
   String _generateCode(_StyleConfig style) {
-    return '''SuperTextPreview(
+    return '''SuperInteractiveTextPreview(
   text: 'Your text here...',
   linkTextStyle: TextStyle(
     color: Color(0x${style.linkColor.value.toRadixString(16).padLeft(8, '0').toUpperCase()}),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-import 'package:super_text/super_text.dart';
+import 'package:super_interactive_text/super_interactive_text.dart';
 import 'screens/home_screen.dart';
 import 'screens/basic_usage_screen.dart';
 import 'screens/custom_styling_screen.dart';
@@ -16,9 +16,9 @@ import 'utils.dart';
 
 void main() {
   // Example of flexible route configuration
-  SuperTextDataParser.configure(
+  SuperInteractiveTextDataParser.configure(
     RouteConfig(
-      baseAddresses: ['https://flutter.dev'],
+      baseAddresses: ['https://MyApp.com'],
       routes: [
         RouteDefinition(
           name: 'basic-screen',
@@ -105,7 +105,7 @@ class TextPreviewExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Text Preview - Examples',
+      title: 'Super Interactive Text - Examples',
       debugShowCheckedModeBanner: false,
       theme: _buildLightTheme(),
       darkTheme: _buildDarkTheme(),
@@ -169,7 +169,7 @@ class TextPreviewExampleApp extends StatelessWidget {
           ),
         ),
       ),
-      // extensions: [SuperTextPreviewTheme.light()],
+      // extensions: [SuperInteractiveTextPreviewTheme.light()],
     );
   }
 
@@ -218,7 +218,7 @@ class TextPreviewExampleApp extends StatelessWidget {
           ),
         ),
       ),
-      // extensions: [SuperTextPreviewTheme.dark()],
+      // extensions: [SuperInteractiveTextPreviewTheme.dark()],
     );
   }
 }

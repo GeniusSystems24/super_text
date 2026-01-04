@@ -1,4 +1,4 @@
-part of '../super_text_preview_library.dart';
+part of '../super_interactive_text_preview_library.dart';
 
 /// Definition of a single route pattern
 /// Used to define how URLs should be matched and handled

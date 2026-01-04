@@ -1,6 +1,6 @@
-# Text Preview - Examples
+# Super Interactive Text - Examples
 
-A comprehensive example app showcasing all features of the `super_text` package.
+A comprehensive example app showcasing all features of the `super_interactive_text` package.
 
 ## 🚀 Getting Started
 
@@ -16,29 +16,29 @@ flutter run
 
 ### 1️⃣ Basic Usage (`BasicUsageScreen`)
 
-The simplest way to use `SuperTextPreview`:
+The simplest way to use `SuperInteractiveTextPreview`:
 
 ```dart
-import 'package:super_text/super_text.dart';
+import 'package:super_interactive_text/super_interactive_text.dart';
 
 // Simple example with a link
-SuperTextPreview(
+SuperInteractiveTextPreview(
   text: 'Visit our website at https://flutter.dev',
 )
 
 // Email and phone number
-SuperTextPreview(
+SuperInteractiveTextPreview(
   text: '''Contact us at support@example.com
 Or call +966555555555''',
 )
 
 // Username and hashtag
-SuperTextPreview(
+SuperInteractiveTextPreview(
   text: 'Follow @flutter_dev and use #FlutterDev',
 )
 
 // Comprehensive example
-SuperTextPreview(
+SuperInteractiveTextPreview(
   text: '''Hello! 👋
 Website: https://flutter.dev
 Email: contact@flutter.dev
@@ -47,8 +47,8 @@ Follow us: @FlutterDev #Flutter #Dart''',
 )
 
 // Using parsedText for better performance
-final parsedData = SuperTextData.parse('Text to parse', save: true);
-SuperTextPreview(
+final parsedData = SuperInteractiveTextData.parse('Text to parse', save: true);
+SuperInteractiveTextPreview(
   parsedText: parsedData,
 )
 ```
@@ -60,7 +60,7 @@ SuperTextPreview(
 Customize colors and text styles:
 
 ```dart
-SuperTextPreview(
+SuperInteractiveTextPreview(
   text: '''Welcome to our website https://example.com
 Contact: contact@company.com
 Phone: +966501234567
@@ -101,7 +101,7 @@ Create custom widgets for each data type:
 
 ```dart
 // Link as Chip
-SuperTextPreview.builder(
+SuperInteractiveTextPreview.builder(
   text: 'Visit https://flutter.dev for more',
   linkBuilder: (link) => Container(
     margin: EdgeInsets.symmetric(horizontal: 4),
@@ -125,7 +125,7 @@ SuperTextPreview.builder(
 )
 
 // Email with icon
-SuperTextPreview.builder(
+SuperInteractiveTextPreview.builder(
   text: 'Contact us at support@company.com',
   emailBuilder: (email) => Container(
     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -147,7 +147,7 @@ SuperTextPreview.builder(
 )
 
 // Username with avatar
-SuperTextPreview.builder(
+SuperInteractiveTextPreview.builder(
   text: 'Follow @flutter_dev on Twitter',
   usernameBuilder: (username) => Container(
     padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -174,7 +174,7 @@ SuperTextPreview.builder(
 )
 
 // Complete example with all builders
-SuperTextPreview.builder(
+SuperInteractiveTextPreview.builder(
   text: '''📱 Our new app!
 🔗 https://flutter.dev
 📧 support@flutter.dev
@@ -200,22 +200,22 @@ SuperTextPreview.builder(
 
 ### 4️⃣ Theming (`ThemingScreen`)
 
-Full control using `SuperTextPreviewTheme`:
+Full control using `SuperInteractiveTextPreviewTheme`:
 
 ```dart
 // Add theme in MaterialApp
 MaterialApp(
   theme: ThemeData(
     extensions: [
-      SuperTextPreviewTheme.light(), // or SuperTextPreviewTheme.dark()
+      SuperInteractiveTextPreviewTheme.light(), // or SuperInteractiveTextPreviewTheme.dark()
     ],
   ),
 )
 
 // Custom theme
-SuperTextPreview(
+SuperInteractiveTextPreview(
   text: 'Your text here...',
-  textPreviewTheme: SuperTextPreviewTheme(
+  textPreviewTheme: SuperInteractiveTextPreviewTheme(
     normalTextFontSize: 16,
     borderRadius: 12,
     normalTextStyle: TextStyle(color: Color(0xFF1C1B1F), fontSize: 16),
@@ -270,7 +270,7 @@ class ChatBubble extends StatelessWidget {
         color: isMe ? colorScheme.primary : colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: SuperTextPreview(
+      child: SuperInteractiveTextPreview(
         text: text,
         normalTextStyle: TextStyle(
           color: isMe ? colorScheme.onPrimary : colorScheme.onSurface,
@@ -307,7 +307,7 @@ class SocialPostCard extends StatelessWidget {
     return Card(
       child: Padding(
         padding: EdgeInsets.all(16),
-        child: SuperTextPreview(
+        child: SuperInteractiveTextPreview(
           text: content,
           linkTextStyle: TextStyle(
             color: platformColor,
@@ -345,15 +345,15 @@ class InteractiveDemo extends StatefulWidget {
 
 class _InteractiveDemoState extends State<InteractiveDemo> {
   final _controller = TextEditingController();
-  List<SuperTextData> _parsedData = [];
+  List<SuperInteractiveTextData> _parsedData = [];
 
   void _parseText() {
     setState(() {
-      _parsedData = SuperTextData.parse(_controller.text, save: true);
+      _parsedData = SuperInteractiveTextData.parse(_controller.text, save: true);
     });
   }
 
-  int _countType(SuperTextType type) {
+  int _countType(SuperInteractiveTextType type) {
     return _parsedData.where((d) => d.textType == type).length;
   }
 
@@ -368,7 +368,7 @@ class _InteractiveDemoState extends State<InteractiveDemo> {
         ),
         
         // Display result
-        SuperTextPreview(
+        SuperInteractiveTextPreview(
           parsedText: _parsedData,
           onLinkTap: (l) => print('Link: ${l.text}'),
           onEmailTap: (e) => print('Email: ${e.text}'),
@@ -378,11 +378,11 @@ class _InteractiveDemoState extends State<InteractiveDemo> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text('Links: ${_countType(SuperTextType.link)}'),
-            Text('Emails: ${_countType(SuperTextType.email)}'),
-            Text('Phones: ${_countType(SuperTextType.phone)}'),
-            Text('Users: ${_countType(SuperTextType.username)}'),
-            Text('Hashtags: ${_countType(SuperTextType.hashtag)}'),
+            Text('Links: ${_countType(SuperInteractiveTextType.link)}'),
+            Text('Emails: ${_countType(SuperInteractiveTextType.email)}'),
+            Text('Phones: ${_countType(SuperInteractiveTextType.phone)}'),
+            Text('Users: ${_countType(SuperInteractiveTextType.username)}'),
+            Text('Hashtags: ${_countType(SuperInteractiveTextType.hashtag)}'),
           ],
         ),
       ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:super_text/super_text.dart';
+import 'package:super_interactive_text/super_interactive_text.dart';
 
 class ThemingScreen extends StatefulWidget {
   const ThemingScreen({super.key});
@@ -23,12 +23,12 @@ class _ThemingScreenState extends State<ThemingScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('التخصيص بالثيمات'),
+        title: const Text('Theming'),
         actions: [
           IconButton(
             icon: Icon(_isDarkMode ? Icons.light_mode : Icons.dark_mode),
             onPressed: () => setState(() => _isDarkMode = !_isDarkMode),
-            tooltip: _isDarkMode ? 'الوضع الفاتح' : 'الوضع المظلم',
+            tooltip: _isDarkMode ? 'Light Mode' : 'Dark Mode',
           ),
         ],
       ),
@@ -37,9 +37,9 @@ class _ThemingScreenState extends State<ThemingScreen> {
         children: [
           _InfoCard(
             icon: Icons.palette_outlined,
-            title: 'SuperTextPreviewTheme',
+            title: 'SuperInteractiveTextPreviewTheme',
             description:
-                'استخدم SuperTextPreviewTheme للتحكم الكامل في مظهر النصوص عبر التطبيق',
+                'Use SuperInteractiveTextPreviewTheme for full control over text appearance throughout the app',
           ).animate().fadeIn(duration: 300.ms).slideX(begin: -0.1),
           const SizedBox(height: 20),
 
@@ -51,7 +51,7 @@ class _ThemingScreenState extends State<ThemingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'أدوات التحكم',
+                    'Controls',
                     style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -61,7 +61,7 @@ class _ThemingScreenState extends State<ThemingScreen> {
                     children: [
                       const Icon(Icons.format_size, size: 20),
                       const SizedBox(width: 12),
-                      const Text('حجم الخط:'),
+                      const Text('Font Size:'),
                       Expanded(
                         child: Slider(
                           value: _fontSize,
@@ -79,7 +79,7 @@ class _ThemingScreenState extends State<ThemingScreen> {
                     children: [
                       const Icon(Icons.rounded_corner, size: 20),
                       const SizedBox(width: 12),
-                      const Text('حواف مستديرة:'),
+                      const Text('Rounded Corners:'),
                       Expanded(
                         child: Slider(
                           value: _borderRadius,
@@ -140,7 +140,7 @@ class _ThemingScreenState extends State<ThemingScreen> {
                         ),
                         const SizedBox(width: 12),
                         Text(
-                          'معاينة مباشرة',
+                          'Live Preview',
                           style: theme.textTheme.titleMedium?.copyWith(
                             color: _isDarkMode ? Colors.white : Colors.black87,
                             fontWeight: FontWeight.bold,
@@ -151,17 +151,17 @@ class _ThemingScreenState extends State<ThemingScreen> {
                     const SizedBox(height: 16),
                     const Divider(),
                     const SizedBox(height: 16),
-                    SuperTextPreview(
-                      text: '''مرحباً بكم في تطبيقنا! 🎉
+                    SuperInteractiveTextPreview(
+                      text: '''Welcome to our app! 🎉
 
-للمزيد من المعلومات، زوروا موقعنا:
+For more info, visit our website:
 https://flutter.dev
 
-للدعم الفني:
+For support:
 📧 support@flutter.dev
 📱 +966555555555
 
-تابعونا على:
+Follow us on:
 🐦 @FlutterDev
 #Flutter #Dart #MobileApp''',
                       textPreviewTheme: customTheme,
@@ -196,9 +196,9 @@ https://flutter.dev
     );
   }
 
-  SuperTextPreviewTheme _buildCustomTheme() {
+  SuperInteractiveTextPreviewTheme _buildCustomTheme() {
     if (_isDarkMode) {
-      return SuperTextPreviewTheme(
+      return SuperInteractiveTextPreviewTheme(
         borderRadius: _borderRadius,
         normalTextFontSize: _fontSize,
         linkTextFontSize: _fontSize,
@@ -242,7 +242,7 @@ https://flutter.dev
         hashtagColor: const Color(0xFFFFB74D),
       );
     } else {
-      return SuperTextPreviewTheme(
+      return SuperInteractiveTextPreviewTheme(
         borderRadius: _borderRadius,
         normalTextFontSize: _fontSize,
         normalTextStyle: TextStyle(
@@ -355,7 +355,7 @@ class _InfoCard extends StatelessWidget {
 }
 
 class _ThemePropertiesCard extends StatelessWidget {
-  final SuperTextPreviewTheme customTheme;
+  final SuperInteractiveTextPreviewTheme customTheme;
   final bool isDarkMode;
 
   const _ThemePropertiesCard({
@@ -379,7 +379,7 @@ class _ThemePropertiesCard extends StatelessWidget {
                 Icon(Icons.settings, size: 20, color: colorScheme.primary),
                 const SizedBox(width: 8),
                 Text(
-                  'خصائص الثيم الحالي',
+                  'Current Theme Properties',
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -392,17 +392,17 @@ class _ThemePropertiesCard extends StatelessWidget {
               runSpacing: 8,
               children: [
                 _PropertyChip(
-                  label: 'الوضع',
-                  value: isDarkMode ? 'مظلم' : 'فاتح',
+                  label: 'Mode',
+                  value: isDarkMode ? 'Dark' : 'Light',
                   color: colorScheme.primary,
                 ),
                 _PropertyChip(
-                  label: 'حجم الخط',
+                  label: 'Font Size',
                   value: '${customTheme.normalTextFontSize.toStringAsFixed(0)}',
                   color: colorScheme.secondary,
                 ),
                 _PropertyChip(
-                  label: 'الحواف',
+                  label: 'Radius',
                   value: '${customTheme.borderRadius.toStringAsFixed(0)}',
                   color: colorScheme.tertiary,
                 ),
@@ -412,7 +412,7 @@ class _ThemePropertiesCard extends StatelessWidget {
             const Divider(),
             const SizedBox(height: 12),
             Text(
-              'ألوان العناصر',
+              'Element Colors',
               style: theme.textTheme.labelMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -422,13 +422,13 @@ class _ThemePropertiesCard extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
-                _ColorIndicator(label: 'روابط', color: customTheme.linkColor),
-                _ColorIndicator(label: 'إيميل', color: customTheme.emailColor),
-                _ColorIndicator(label: 'هاتف', color: customTheme.phoneColor),
+                _ColorIndicator(label: 'Links', color: customTheme.linkColor),
+                _ColorIndicator(label: 'Email', color: customTheme.emailColor),
+                _ColorIndicator(label: 'Phone', color: customTheme.phoneColor),
                 _ColorIndicator(
-                    label: 'مستخدم', color: customTheme.usernameColor),
+                    label: 'User', color: customTheme.usernameColor),
                 _ColorIndicator(
-                    label: 'هاشتاغ', color: customTheme.hashtagColor),
+                    label: 'Hashtag', color: customTheme.hashtagColor),
               ],
             ),
           ],
@@ -513,7 +513,7 @@ class _ColorIndicator extends StatelessWidget {
 }
 
 class _CodeCard extends StatelessWidget {
-  final SuperTextPreviewTheme customTheme;
+  final SuperInteractiveTextPreviewTheme customTheme;
   final bool isDarkMode;
 
   const _CodeCard({
@@ -537,7 +537,7 @@ class _CodeCard extends StatelessWidget {
                 Icon(Icons.code, size: 20, color: colorScheme.primary),
                 const SizedBox(width: 8),
                 Text(
-                  'كيفية استخدام الثيم',
+                  'How to use theme',
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -555,24 +555,24 @@ class _CodeCard extends StatelessWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: SelectableText(
-                  '''// إضافة الثيم في MaterialApp
+                  '''// Add theme to MaterialApp
 MaterialApp(
   theme: ThemeData(
     extensions: [
-      SuperTextPreviewTheme.${isDarkMode ? 'dark' : 'light'}(),
+      SuperInteractiveTextPreviewTheme.${isDarkMode ? 'dark' : 'light'}(),
     ],
   ),
 )
 
-// أو استخدام ثيم مخصص
-SuperTextPreview(
-  text: 'النص هنا...',
-  textPreviewTheme: SuperTextPreviewTheme(
+// Or use a custom theme
+SuperInteractiveTextPreview(
+  text: 'Text here...',
+  textPreviewTheme: SuperInteractiveTextPreviewTheme(
     normalTextFontSize: ${customTheme.normalTextFontSize.toStringAsFixed(0)},
     borderRadius: ${customTheme.borderRadius.toStringAsFixed(0)},
     linkColor: Color(0xFF6750A4),
     emailColor: Color(0xFF0091EA),
-    // ... باقي الخصائص
+    // ... other properties
   ),
 )''',
                   style: TextStyle(

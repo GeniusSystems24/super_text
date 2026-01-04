@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:super_text/super_text.dart';
+import 'package:super_interactive_text/super_interactive_text.dart';
 
 class InteractiveDemoScreen extends StatefulWidget {
   const InteractiveDemoScreen({super.key});
@@ -12,17 +12,17 @@ class InteractiveDemoScreen extends StatefulWidget {
 
 class _InteractiveDemoScreenState extends State<InteractiveDemoScreen> {
   final _controller = TextEditingController(
-    text: '''مرحباً بكم! 👋
+    text: '''Welcome! 👋
 
-جربوا إدخال نصوص تحتوي على:
-🔗 روابط: https://flutter.dev
-📧 إيميل: test@example.com  
-📱 هاتف: +966555555555
-👤 مستخدم: @flutter_dev
-#️⃣ هاشتاغ: #Flutter #Dart''',
+Try entering text containing:
+🔗 Links: https://flutter.dev
+📧 Email: test@example.com  
+📱 Phone: +966555555555
+👤 User: @flutter_dev
+#️⃣ Hashtag: #Flutter #Dart''',
   );
 
-  List<SuperTextData> _parsedData = [];
+  List<SuperInteractiveTextData> _parsedData = [];
   String _lastTapped = '';
 
   @override
@@ -33,7 +33,8 @@ class _InteractiveDemoScreenState extends State<InteractiveDemoScreen> {
 
   void _parseText() {
     setState(() {
-      _parsedData = SuperTextData.parse(_controller.text, save: true);
+      _parsedData =
+          SuperInteractiveTextData.parse(_controller.text, save: true);
     });
   }
 
@@ -50,21 +51,21 @@ class _InteractiveDemoScreenState extends State<InteractiveDemoScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('عرض تفاعلي'),
+        title: const Text('Interactive Demo'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
-              _controller.text = '''مرحباً بكم! 👋
+              _controller.text = '''Welcome! 👋
 
-🔗 روابط: https://flutter.dev
-📧 إيميل: test@example.com  
-📱 هاتف: +966555555555
-👤 مستخدم: @flutter_dev
-#️⃣ هاشتاغ: #Flutter #Dart''';
+🔗 Links: https://flutter.dev
+📧 Email: test@example.com  
+📱 Phone: +966555555555
+👤 User: @flutter_dev
+#️⃣ Hashtag: #Flutter #Dart''';
               _parseText();
             },
-            tooltip: 'إعادة تعيين',
+            tooltip: 'Reset',
           ),
         ],
       ),
@@ -81,7 +82,7 @@ class _InteractiveDemoScreenState extends State<InteractiveDemoScreen> {
               controller: _controller,
               maxLines: 6,
               decoration: InputDecoration(
-                hintText: 'اكتب نصك هنا...',
+                hintText: 'Type your text here...',
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.all(16),
                 suffixIcon: Column(
@@ -107,7 +108,7 @@ class _InteractiveDemoScreenState extends State<InteractiveDemoScreen> {
             child: Row(
               children: [
                 Text(
-                  'العناصر المكتشفة: ${_parsedData.where((d) => d.textType != SuperTextType.normal).length}',
+                  'Detected Items: ${_parsedData.where((d) => d.textType != SuperInteractiveTextType.normal).length}',
                   style: theme.textTheme.labelMedium?.copyWith(
                     color: colorScheme.primary,
                     fontWeight: FontWeight.bold,
@@ -145,7 +146,7 @@ class _InteractiveDemoScreenState extends State<InteractiveDemoScreen> {
                 ],
               ),
               child: SingleChildScrollView(
-                child: SuperTextPreview(
+                child: SuperInteractiveTextPreview(
                   parsedText: _parsedData,
                   onLinkTap: (l) => _setTapped('🔗 ${l.text}'),
                   onEmailTap: (e) => _setTapped('📧 ${e.text}'),
@@ -172,32 +173,32 @@ class _InteractiveDemoScreenState extends State<InteractiveDemoScreen> {
                 children: [
                   _StatItem(
                     icon: Icons.link,
-                    label: 'روابط',
-                    count: _countType(SuperTextType.link),
+                    label: 'Links',
+                    count: _countType(SuperInteractiveTextType.link),
                     color: colorScheme.primary,
                   ),
                   _StatItem(
                     icon: Icons.email,
-                    label: 'إيميل',
-                    count: _countType(SuperTextType.email),
+                    label: 'Email',
+                    count: _countType(SuperInteractiveTextType.email),
                     color: Colors.orange,
                   ),
                   _StatItem(
                     icon: Icons.phone,
-                    label: 'هاتف',
-                    count: _countType(SuperTextType.phone),
+                    label: 'Phone',
+                    count: _countType(SuperInteractiveTextType.phone),
                     color: Colors.green,
                   ),
                   _StatItem(
                     icon: Icons.person,
-                    label: 'مستخدم',
-                    count: _countType(SuperTextType.username),
+                    label: 'User',
+                    count: _countType(SuperInteractiveTextType.username),
                     color: Colors.blue,
                   ),
                   _StatItem(
                     icon: Icons.tag,
-                    label: 'هاشتاغ',
-                    count: _countType(SuperTextType.hashtag),
+                    label: 'Hashtag',
+                    count: _countType(SuperInteractiveTextType.hashtag),
                     color: Colors.purple,
                   ),
                 ],
@@ -213,7 +214,7 @@ class _InteractiveDemoScreenState extends State<InteractiveDemoScreen> {
     setState(() => _lastTapped = value);
   }
 
-  int _countType(SuperTextType type) {
+  int _countType(SuperInteractiveTextType type) {
     return _parsedData.where((d) => d.textType == type).length;
   }
 }

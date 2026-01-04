@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:super_text/super_text.dart';
+import 'package:super_interactive_text/super_interactive_text.dart';
 
 import '../widgets/example_card.dart';
 
@@ -19,16 +19,16 @@ class BasicUsageScreen extends StatelessWidget {
           const InfoCard(
             title: 'Simple Usage',
             description:
-                'The simplest way to use SuperTextPreview is to pass the text directly',
+                'The simplest way to use SuperInteractiveTextPreview is to pass the text directly',
           ).animate().fadeIn(duration: 300.ms).slideX(begin: -0.1),
           const SizedBox(height: 16),
           ExampleCard(
             title: 'Simple Text with Link',
             description: 'Basic example with a clickable URL',
-            code: '''SuperTextPreview(
+            code: '''SuperInteractiveTextPreview(
   text: 'Visit our website at https://flutter.dev',
 )''',
-            preview: const SuperTextPreview(
+            preview: const SuperInteractiveTextPreview(
               text: 'Visit our website at https://flutter.dev',
             ),
           )
@@ -39,11 +39,11 @@ class BasicUsageScreen extends StatelessWidget {
           ExampleCard(
             title: 'Email and Phone Number',
             description: 'Detecting and styling emails and phone numbers',
-            code: '''SuperTextPreview(
+            code: '''SuperInteractiveTextPreview(
   text: 'Contact us at support@example.com\\n'
         'Or call +966555555555',
 )''',
-            preview: const SuperTextPreview(
+            preview: const SuperInteractiveTextPreview(
               text: 'Contact us at support@example.com\nOr call +966555555555',
             ),
           )
@@ -54,10 +54,10 @@ class BasicUsageScreen extends StatelessWidget {
           ExampleCard(
             title: 'Username and Hashtag',
             description: 'Recognizing @mentions and #hashtags',
-            code: '''SuperTextPreview(
+            code: '''SuperInteractiveTextPreview(
   text: 'Follow @flutter_dev and use #FlutterDev',
 )''',
-            preview: const SuperTextPreview(
+            preview: const SuperInteractiveTextPreview(
               text: 'Follow @flutter_dev and use #FlutterDev',
             ),
           )
@@ -68,14 +68,14 @@ class BasicUsageScreen extends StatelessWidget {
           ExampleCard(
             title: 'Comprehensive Example',
             description: 'All types of interactive text in one widget',
-            code: '''SuperTextPreview(
+            code: '''SuperInteractiveTextPreview(
   text: \'\'\'Hello! 👋
 Website: https://flutter.dev
 Email: contact@flutter.dev
 Phone: +966500000000
 Follow: @FlutterDev #Flutter #Dart\'\'\',
 )''',
-            preview: const SuperTextPreview(
+            preview: const SuperInteractiveTextPreview(
               text: '''Hello! 👋
 Website: https://flutter.dev
 Email: contact@flutter.dev
@@ -96,17 +96,17 @@ Follow: @FlutterDev #Flutter #Dart''',
             title: 'Using parsedText',
             description: 'Pre-parse text for better performance',
             code: '''// Parse once
-final parsedData = SuperTextData.parse(
+final parsedData = SuperInteractiveTextData.parse(
   'Pre-parsed text https://example.com',
   save: true,
 );
 
 // Use multiple times
-SuperTextPreview(
+SuperInteractiveTextPreview(
   parsedText: parsedData,
 )''',
-            preview: SuperTextPreview(
-              parsedText: SuperTextData.parse(
+            preview: SuperInteractiveTextPreview(
+              parsedText: SuperInteractiveTextData.parse(
                 'This text was pre-parsed https://example.com',
                 save: true,
               ),
