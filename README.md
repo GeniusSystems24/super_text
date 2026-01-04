@@ -23,8 +23,7 @@ Add the library to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  super_interactive_text:
-    path: ../packages/super_interactive_text
+  super_interactive_text: 1.1.0
 ```
 
 ## Basic Usage
