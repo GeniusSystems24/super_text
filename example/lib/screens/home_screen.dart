@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -14,34 +12,14 @@ class HomeScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar.large(
-            expandedHeight: 200,
+            expandedHeight: 180,
             flexibleSpace: FlexibleSpaceBar(
-              title: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Super Interactive Text',
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      color: colorScheme.onSurface,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      // open package pub.dev link
-                      launchUrl(Uri.parse(
-                          'https://pub.dev/packages/super_interactive_text'));
-                    },
-                    child: Text(
-                      'Flutter Package',
-                      style: TextStyle(
-                        color: Colors.white.withValues(
-                          alpha: 0.8,
-                        ),
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                ],
+              title: Text(
+                'Super Interactive Text',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  color: colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               background: Container(
                 decoration: BoxDecoration(
@@ -54,62 +32,6 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      top: 30,
-                      right: 30,
-                      child: Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: colorScheme.primary.withOpacity(0.2),
-                        ),
-                      ),
-                    )
-                        .animate(onPlay: (c) => c.repeat())
-                        .scale(
-                          begin: const Offset(1, 1),
-                          end: const Offset(1.2, 1.2),
-                          duration: 2.seconds,
-                          curve: Curves.easeInOut,
-                        )
-                        .then()
-                        .scale(
-                          begin: const Offset(1.2, 1.2),
-                          end: const Offset(1, 1),
-                          duration: 2.seconds,
-                          curve: Curves.easeInOut,
-                        ),
-                    Positioned(
-                      bottom: 60,
-                      left: 20,
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: colorScheme.tertiary.withOpacity(0.2),
-                        ),
-                      ),
-                    )
-                        .animate(onPlay: (c) => c.repeat())
-                        .scale(
-                          begin: const Offset(1, 1),
-                          end: const Offset(1.3, 1.3),
-                          duration: 3.seconds,
-                          curve: Curves.easeInOut,
-                        )
-                        .then()
-                        .scale(
-                          begin: const Offset(1.3, 1.3),
-                          end: const Offset(1, 1),
-                          duration: 3.seconds,
-                          curve: Curves.easeInOut,
-                        ),
-                  ],
-                ),
               ),
             ),
           ),
@@ -120,21 +42,13 @@ class HomeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Welcome to Super Interactive Text Library',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      color: colorScheme.primary,
-                    ),
-                  ).animate().fadeIn(duration: 400.ms).slideX(begin: -0.1),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Discover the power of converting text into interactive clickable elements',
-                    style: theme.textTheme.bodyMedium?.copyWith(
+                    'A powerful Flutter package for parsing, displaying, and editing text with interactive elements.',
+                    style: theme.textTheme.bodyLarge?.copyWith(
                       color: colorScheme.onSurfaceVariant,
                     ),
-                  )
-                      .animate()
-                      .fadeIn(duration: 400.ms, delay: 100.ms)
-                      .slideX(begin: -0.1),
+                  ),
+                  const SizedBox(height: 24),
+                  _buildSectionTitle(context, 'Preview Examples', Icons.visibility),
                 ],
               ),
             ),
@@ -146,78 +60,83 @@ class HomeScreen extends StatelessWidget {
                 maxCrossAxisExtent: 400,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
-                childAspectRatio: 2.2,
+                childAspectRatio: 2.5,
               ),
               delegate: SliverChildListDelegate([
                 _ExampleCard(
-                  title: 'Basic Usage',
-                  description:
-                      'Learn the simplest way to use SuperInteractiveTextPreview',
-                  icon: Icons.play_arrow_rounded,
-                  gradient: [const Color(0xFF6750A4), const Color(0xFF9747FF)],
-                  route: '/basic',
-                  delay: 0,
+                  title: 'Basic Preview',
+                  description: 'Display text with auto-detected interactive elements',
+                  icon: Icons.text_fields,
+                  color: const Color(0xFF6750A4),
+                  route: '/preview/basic',
                 ),
                 _ExampleCard(
                   title: 'Custom Styling',
-                  description:
-                      'Customize colors and styles for different text types',
-                  icon: Icons.palette_rounded,
-                  gradient: [const Color(0xFF00897B), const Color(0xFF4DB6AC)],
-                  route: '/styling',
-                  delay: 50,
+                  description: 'Customize colors and styles for each element type',
+                  icon: Icons.palette,
+                  color: const Color(0xFF00897B),
+                  route: '/preview/styling',
                 ),
                 _ExampleCard(
                   title: 'Builder Pattern',
                   description: 'Create custom widgets for each data type',
-                  icon: Icons.build_rounded,
-                  gradient: [const Color(0xFFE65100), const Color(0xFFFF9800)],
-                  route: '/builder',
-                  delay: 100,
+                  icon: Icons.widgets,
+                  color: const Color(0xFFE65100),
+                  route: '/preview/builder',
                 ),
                 _ExampleCard(
                   title: 'Theming',
-                  description:
-                      'Use SuperInteractiveTextPreviewTheme for full control',
-                  icon: Icons.auto_awesome_rounded,
-                  gradient: [const Color(0xFF1565C0), const Color(0xFF42A5F5)],
-                  route: '/theming',
-                  delay: 150,
+                  description: 'Use theme presets and customization',
+                  icon: Icons.color_lens,
+                  color: const Color(0xFF1565C0),
+                  route: '/preview/theming',
                 ),
                 _ExampleCard(
-                  title: 'Real World Example',
-                  description:
-                      'Simulate a real chat app with interactive messages',
-                  icon: Icons.chat_rounded,
-                  gradient: [const Color(0xFFC2185B), const Color(0xFFF48FB1)],
-                  route: '/real-world',
-                  delay: 200,
+                  title: 'Internal Routing',
+                  description: 'Handle internal app links with parameters',
+                  icon: Icons.route,
+                  color: const Color(0xFFC2185B),
+                  route: '/preview/routing',
+                ),
+              ]),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.all(16),
+            sliver: SliverToBoxAdapter(
+              child: _buildSectionTitle(context, 'Editor Examples', Icons.edit),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 400,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childAspectRatio: 2.5,
+              ),
+              delegate: SliverChildListDelegate([
+                _ExampleCard(
+                  title: 'Basic Editor',
+                  description: 'Simple rich text editor with auto-detection',
+                  icon: Icons.edit_note,
+                  color: const Color(0xFF7B1FA2),
+                  route: '/editor/basic',
                 ),
                 _ExampleCard(
-                  title: 'Social Media',
-                  description: 'Display social media links attractively',
-                  icon: Icons.share_rounded,
-                  gradient: [const Color(0xFF5C6BC0), const Color(0xFF9FA8DA)],
-                  route: '/social-media',
-                  delay: 250,
+                  title: 'Editor with Controller',
+                  description: 'Programmatic control over the editor',
+                  icon: Icons.code,
+                  color: const Color(0xFF5C6BC0),
+                  route: '/editor/controller',
                 ),
                 _ExampleCard(
-                  title: 'Interactive Demo',
-                  description:
-                      'Try entering your own text and see changes live',
-                  icon: Icons.edit_note_rounded,
-                  gradient: [const Color(0xFF7B1FA2), const Color(0xFFBA68C8)],
-                  route: '/interactive',
-                  delay: 300,
-                ),
-                _ExampleCard(
-                  title: 'App Navigation',
-                  description:
-                      'Discover how to use links to navigate within the app',
-                  icon: Icons.directions_rounded,
-                  gradient: [const Color(0xFFFF6F00), const Color(0xFFFFB74D)],
-                  route: '/routes',
-                  delay: 350,
+                  title: 'Editor Features',
+                  description: 'Explore all editor features and options',
+                  icon: Icons.auto_awesome,
+                  color: const Color(0xFFFF6F00),
+                  route: '/editor/features',
                 ),
               ]),
             ),
@@ -225,10 +144,29 @@ class HomeScreen extends StatelessWidget {
           SliverPadding(
             padding: const EdgeInsets.all(24),
             sliver: SliverToBoxAdapter(
-              child: _FeaturesSection()
-                  .animate()
-                  .fadeIn(duration: 500.ms, delay: 400.ms)
-                  .slideY(begin: 0.1),
+              child: _FeaturesSection(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(BuildContext context, String title, IconData icon) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        children: [
+          Icon(icon, color: colorScheme.primary),
+          const SizedBox(width: 8),
+          Text(
+            title,
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: colorScheme.primary,
             ),
           ),
         ],
@@ -241,96 +179,70 @@ class _ExampleCard extends StatelessWidget {
   final String title;
   final String description;
   final IconData icon;
-  final List<Color> gradient;
+  final Color color;
   final String route;
-  final int delay;
 
   const _ExampleCard({
     required this.title,
     required this.description,
     required this.icon,
-    required this.gradient,
+    required this.color,
     required this.route,
-    required this.delay,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Material(
-      color: Colors.transparent,
-      borderRadius: BorderRadius.circular(16),
+    return Card(
+      elevation: 2,
       child: InkWell(
         onTap: () => Navigator.pushNamed(context, route),
-        borderRadius: BorderRadius.circular(16),
-        child: Ink(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: gradient,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: gradient[0].withOpacity(0.3),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(icon, color: color, size: 28),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      description,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                size: 16,
               ),
             ],
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(icon, color: Colors.white, size: 28),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        title,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        description,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: Colors.white.withOpacity(0.9),
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-                Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: Colors.white.withOpacity(0.7),
-                  size: 18,
-                ),
-              ],
-            ),
-          ),
         ),
       ),
-    )
-        .animate()
-        .fadeIn(duration: 400.ms, delay: Duration(milliseconds: 200 + delay))
-        .slideY(begin: 0.1);
+    );
   }
 }
 
@@ -360,11 +272,11 @@ class _FeaturesSection extends StatelessWidget {
                   color: colorScheme.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(Icons.star_rounded, color: colorScheme.primary),
+                child: Icon(Icons.star, color: colorScheme.primary),
               ),
               const SizedBox(width: 12),
               Text(
-                'Key Features',
+                'Supported Elements',
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -376,14 +288,13 @@ class _FeaturesSection extends StatelessWidget {
             spacing: 8,
             runSpacing: 8,
             children: [
-              _FeatureChip(label: '🔗 Links', color: colorScheme.primary),
-              _FeatureChip(label: '📧 Emails', color: colorScheme.secondary),
-              _FeatureChip(label: '📱 Phones', color: Colors.green),
-              _FeatureChip(label: '👤 Usernames', color: Colors.blue),
-              _FeatureChip(label: '#️⃣ Hashtags', color: Colors.purple),
-              _FeatureChip(label: '🌐 Social Media', color: Colors.pink),
-              _FeatureChip(label: '🏠 Internal Routes', color: Colors.orange),
-              _FeatureChip(label: '💾 Data Serialization', color: Colors.teal),
+              _FeatureChip(label: 'Links', icon: Icons.link, color: colorScheme.primary),
+              _FeatureChip(label: 'Emails', icon: Icons.email, color: Colors.green),
+              _FeatureChip(label: 'Phones', icon: Icons.phone, color: Colors.orange),
+              _FeatureChip(label: '@Mentions', icon: Icons.alternate_email, color: Colors.blue),
+              _FeatureChip(label: '#Hashtags', icon: Icons.tag, color: Colors.purple),
+              _FeatureChip(label: 'Social Media', icon: Icons.share, color: Colors.pink),
+              _FeatureChip(label: 'App Routes', icon: Icons.route, color: Colors.teal),
             ],
           ),
         ],
@@ -394,9 +305,14 @@ class _FeaturesSection extends StatelessWidget {
 
 class _FeatureChip extends StatelessWidget {
   final String label;
+  final IconData icon;
   final Color color;
 
-  const _FeatureChip({required this.label, required this.color});
+  const _FeatureChip({
+    required this.label,
+    required this.icon,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -407,13 +323,20 @@ class _FeatureChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color.withOpacity(0.3)),
       ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 13,
-          color: color,
-          fontWeight: FontWeight.w500,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: color),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 13,
+              color: color,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ),
     );
   }

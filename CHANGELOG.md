@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-01-05
+
+### Added
+- **Rich Text Editor**: New `SuperInteractiveTextEditor` widget built on top of `super_editor`
+- **Interactive Editor Controller**: `InteractiveEditorController` for programmatic control
+- **Auto-Detection**: Automatic detection of interactive elements while typing
+- **Formatting Toolbar**: Built-in toolbar with bold, italic, underline, and interactive element buttons
+- **Insert Dialogs**: Easy-to-use dialogs for inserting links, mentions, hashtags, emails, and phone numbers
+- **Custom Attributions**: New attribution system for interactive elements:
+  - `InteractiveLinkAttribution`
+  - `InteractiveEmailAttribution`
+  - `InteractivePhoneAttribution`
+  - `InteractiveMentionAttribution`
+  - `InteractiveHashtagAttribution`
+  - `InteractiveSocialMediaAttribution`
+  - `InteractiveRouteAttribution`
+- **Interactive Text Detector**: `InteractiveTextDetector` class for standalone detection
+- **Stylesheet Support**: `createInteractiveStylesheet()` for custom styling
+- **Export Functions**: Export as plain text or JSON with attribution data
+- **Suggestions Support**: Mention and hashtag suggestions in insert dialogs
+
+### Changed
+- **Dependency**: Added `super_editor: ^0.3.0-dev.47` as a dependency
+- **Library Structure**: Reorganized into preview and editor modules
+- **Version Bump**: Major version bump due to new editor functionality
+
+### Migration Guide
+The preview functionality remains unchanged. To use the new editor:
+```dart
+// New editor widget
+SuperInteractiveTextEditor(
+  initialText: 'Hello @world!',
+  autoDetect: true,
+  showToolbar: true,
+  onChanged: (text) => print(text),
+)
+```
+
 ## [1.1.0] - 2026-01-04
 
 ### Added

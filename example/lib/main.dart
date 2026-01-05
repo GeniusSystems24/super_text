@@ -1,224 +1,96 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-
 import 'package:super_interactive_text/super_interactive_text.dart';
+
 import 'screens/home_screen.dart';
-import 'screens/basic_usage_screen.dart';
-import 'screens/custom_styling_screen.dart';
-import 'screens/builder_pattern_screen.dart';
-import 'screens/theming_screen.dart';
-import 'screens/real_world_screen.dart';
-import 'screens/social_media_screen.dart';
-import 'screens/interactive_demo_screen.dart';
-import 'screens/route_example_screen.dart';
-import 'utils.dart';
+import 'screens/preview/basic_preview_screen.dart';
+import 'screens/preview/custom_styling_screen.dart';
+import 'screens/preview/builder_pattern_screen.dart';
+import 'screens/preview/theming_screen.dart';
+import 'screens/preview/routing_screen.dart';
+import 'screens/editor/basic_editor_screen.dart';
+import 'screens/editor/editor_with_controller_screen.dart';
+import 'screens/editor/editor_features_screen.dart';
 
 void main() {
-  // Example of flexible route configuration
+  // Configure routes before running the app
   SuperInteractiveTextDataParser.configure(
     RouteConfig(
-      baseAddresses: ['https://MyApp.com'],
+      baseAddresses: ['https://example.com', 'example://'],
       routes: [
         RouteDefinition(
-          name: 'basic-screen',
-          pattern: r'basic$',
+          name: 'home',
+          pattern: r'home$',
           parameterNames: {},
           onNavigate: (context, data) {
-            Navigator.pushNamed(context, '/basic');
-            showToast(context, 'Navigated to Basic Usage');
+            Navigator.pushNamed(context, '/');
           },
         ),
         RouteDefinition(
-          name: 'styling-screen',
-          pattern: r'styling$',
-          parameterNames: {},
+          name: 'user-profile',
+          pattern: r'users/([^/]+)',
+          parameterNames: {'userId': true},
           onNavigate: (context, data) {
-            Navigator.pushNamed(context, '/styling');
-            showToast(context, 'Navigated to Custom Styling');
+            final userId = data.pathParameters['userId'];
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Navigate to user: $userId')),
+            );
           },
         ),
         RouteDefinition(
-          name: 'builder-screen',
-          pattern: r'builder$',
-          parameterNames: {},
+          name: 'post-detail',
+          pattern: r'posts/([^/]+)',
+          parameterNames: {'postId': true},
           onNavigate: (context, data) {
-            Navigator.pushNamed(context, '/builder');
-            showToast(context, 'Navigated to Builder Pattern');
-          },
-        ),
-        RouteDefinition(
-          name: 'theming-screen',
-          pattern: r'theming$',
-          parameterNames: {},
-          onNavigate: (context, data) {
-            Navigator.pushNamed(context, '/theming');
-            showToast(context, 'Navigated to Theming');
-          },
-        ),
-        RouteDefinition(
-          name: 'real-world-screen',
-          pattern: r'real-world$',
-          parameterNames: {},
-          onNavigate: (context, data) {
-            Navigator.pushNamed(context, '/real-world');
-            showToast(context, 'Navigated to Real World Example');
-          },
-        ),
-        RouteDefinition(
-          name: 'social-media-screen',
-          pattern: r'social-media$',
-          parameterNames: {},
-          onNavigate: (context, data) {
-            Navigator.pushNamed(context, '/social-media');
-            showToast(context, 'Navigated to Social Media');
-          },
-        ),
-        RouteDefinition(
-          name: 'interactive-screen',
-          pattern: r'interactive$',
-          parameterNames: {},
-          onNavigate: (context, data) {
-            Navigator.pushNamed(context, '/interactive');
-            showToast(context, 'Navigated to Interactive Demo');
-          },
-        ),
-        RouteDefinition(
-          name: 'route-screen',
-          pattern: r'routes$',
-          parameterNames: {},
-          onNavigate: (context, data) {
-            Navigator.pushNamed(context, '/routes');
-            showToast(context, 'Navigated to Route Examples');
+            final postId = data.pathParameters['postId'];
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Navigate to post: $postId')),
+            );
           },
         ),
       ],
     ),
   );
 
-  runApp(const TextPreviewExampleApp());
+  runApp(const SuperInteractiveTextExampleApp());
 }
 
-class TextPreviewExampleApp extends StatelessWidget {
-  const TextPreviewExampleApp({super.key});
+class SuperInteractiveTextExampleApp extends StatelessWidget {
+  const SuperInteractiveTextExampleApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Super Interactive Text - Examples',
+      title: 'Super Interactive Text Examples',
       debugShowCheckedModeBanner: false,
-      theme: _buildLightTheme(),
-      darkTheme: _buildDarkTheme(),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF6750A4),
+          brightness: Brightness.light,
+        ),
+        useMaterial3: true,
+      ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF6750A4),
+          brightness: Brightness.dark,
+        ),
+        useMaterial3: true,
+      ),
       themeMode: ThemeMode.system,
       initialRoute: '/',
       routes: {
         '/': (context) => const HomeScreen(),
-        '/basic': (context) => const BasicUsageScreen(),
-        '/styling': (context) => const CustomStylingScreen(),
-        '/builder': (context) => const BuilderPatternScreen(),
-        '/theming': (context) => const ThemingScreen(),
-        '/real-world': (context) => const RealWorldScreen(),
-        '/social-media': (context) => const SocialMediaScreen(),
-        '/interactive': (context) => const InteractiveDemoScreen(),
-        '/routes': (context) => const RouteExampleScreen(),
+        // Preview screens
+        '/preview/basic': (context) => const BasicPreviewScreen(),
+        '/preview/styling': (context) => const CustomStylingScreen(),
+        '/preview/builder': (context) => const BuilderPatternScreen(),
+        '/preview/theming': (context) => const ThemingScreen(),
+        '/preview/routing': (context) => const RoutingScreen(),
+        // Editor screens
+        '/editor/basic': (context) => const BasicEditorScreen(),
+        '/editor/controller': (context) => const EditorWithControllerScreen(),
+        '/editor/features': (context) => const EditorFeaturesScreen(),
       },
-    );
-  }
-
-  ThemeData _buildLightTheme() {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: const Color(0xFF6750A4),
-      brightness: Brightness.light,
-      primary: const Color(0xFF6750A4),
-      secondary: const Color(0xFF625B71),
-      tertiary: const Color(0xFF7D5260),
-      surface: const Color(0xFFFFFBFE),
-    );
-
-    return ThemeData(
-      useMaterial3: true,
-      colorScheme: colorScheme,
-      textTheme: GoogleFonts.cairoTextTheme().copyWith(
-        displayLarge: GoogleFonts.cairo(fontWeight: FontWeight.bold),
-        displayMedium: GoogleFonts.cairo(fontWeight: FontWeight.bold),
-        headlineLarge: GoogleFonts.cairo(fontWeight: FontWeight.w700),
-        headlineMedium: GoogleFonts.cairo(fontWeight: FontWeight.w600),
-        titleLarge: GoogleFonts.cairo(fontWeight: FontWeight.w600),
-        bodyLarge: GoogleFonts.cairo(),
-        bodyMedium: GoogleFonts.cairo(),
-      ),
-      appBarTheme: AppBarTheme(
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: colorScheme.surface,
-        foregroundColor: colorScheme.onSurface,
-        surfaceTintColor: Colors.transparent,
-      ),
-      cardTheme: CardThemeData(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        clipBehavior: Clip.antiAlias,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
-      // extensions: [SuperInteractiveTextPreviewTheme.light()],
-    );
-  }
-
-  ThemeData _buildDarkTheme() {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: const Color(0xFF6750A4),
-      brightness: Brightness.dark,
-      primary: const Color(0xFFD0BCFF),
-      secondary: const Color(0xFFCCC2DC),
-      tertiary: const Color(0xFFEFB8C8),
-      surface: const Color(0xFF1C1B1F),
-    );
-
-    return ThemeData(
-      useMaterial3: true,
-      colorScheme: colorScheme,
-      textTheme:
-          GoogleFonts.cairoTextTheme(ThemeData.dark().textTheme).copyWith(
-        displayLarge: GoogleFonts.cairo(fontWeight: FontWeight.bold),
-        displayMedium: GoogleFonts.cairo(fontWeight: FontWeight.bold),
-        headlineLarge: GoogleFonts.cairo(fontWeight: FontWeight.w700),
-        headlineMedium: GoogleFonts.cairo(fontWeight: FontWeight.w600),
-        titleLarge: GoogleFonts.cairo(fontWeight: FontWeight.w600),
-        bodyLarge: GoogleFonts.cairo(),
-        bodyMedium: GoogleFonts.cairo(),
-      ),
-      appBarTheme: AppBarTheme(
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: colorScheme.surface,
-        foregroundColor: colorScheme.onSurface,
-        surfaceTintColor: Colors.transparent,
-      ),
-      cardTheme: CardThemeData(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        clipBehavior: Clip.antiAlias,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
-      // extensions: [SuperInteractiveTextPreviewTheme.dark()],
     );
   }
 }

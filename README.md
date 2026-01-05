@@ -1,207 +1,398 @@
-# SuperInteractiveText
+# Super Interactive Text
 
-A powerful Flutter widget for displaying text with interactive, clickable elements.
+A powerful Flutter package for parsing, displaying, and editing text with interactive elements.
+
+[![pub package](https://img.shields.io/pub/v/super_interactive_text.svg)](https://pub.dev/packages/super_interactive_text)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [Live Demo](https://geniussystems24.github.io/super_interactive_text/)
 
-## Key Features
+## Features
 
-- 🔗 **Link Extraction**: Supports HTTP and HTTPS with query parameters.
-- 📧 **Email Extraction**: Recognizes all valid email formats.
-- 📱 **Phone Number Extraction**: Supports local and international numbers with validation.
-- 👤 **Username Extraction**: Recognizes usernames starting with @.
-- 🏷️ **Hashtag Extraction**: Recognizes hashtags starting with #.
-- 🏠 **Internal Route Extraction**: Recognizes valid internal app routes.
-- 🌐 **Social Media Extraction**: Instagram, Twitter, Facebook, YouTube, LinkedIn, TikTok, WhatsApp, Telegram.
-- 💾 **Serialization Support**: Convert data to/from Map for storage and retrieval.
-- 🎨 **Customizable Styling**: Ability to customize the appearance of each data type.
-- ⚡ **High Performance**: Fast and efficient processing of long texts.
+### Preview (Display)
+- **Link Detection**: HTTP/HTTPS URLs with query parameters
+- **Email Detection**: All valid email formats
+- **Phone Detection**: Local and international numbers with validation
+- **Mention Detection**: Usernames starting with @
+- **Hashtag Detection**: Tags starting with #
+- **Social Media Detection**: Instagram, Twitter, Facebook, YouTube, LinkedIn, TikTok, WhatsApp, Telegram
+- **Internal Routes**: Custom app route patterns with parameter extraction
+- **Serialization**: Convert to/from Map for storage
+
+### Editor (New in v2.0)
+- **Rich Text Editing**: Full-featured editor built on `super_editor`
+- **Auto-Detection**: Automatic detection while typing
+- **Formatting Toolbar**: Bold, italic, underline, and interactive elements
+- **Insert Dialogs**: Easy insertion of links, mentions, hashtags, emails, phones
+- **Controller API**: Programmatic control over the editor
+- **Export Options**: Plain text and JSON export
 
 ## Installation
 
-Add the library to your `pubspec.yaml`:
-
 ```yaml
 dependencies:
-  super_interactive_text: 1.1.0
+  super_interactive_text: ^2.0.0
 ```
 
-## Basic Usage
+## Quick Start
+
+### Preview Widget
+
+Display text with automatically detected interactive elements:
 
 ```dart
 import 'package:super_interactive_text/super_interactive_text.dart';
 
-class MyWidget extends StatelessWidget {
+SuperInteractiveTextPreview(
+  text: '''
+    Visit https://flutter.dev
+    Email: contact@example.com
+    Call: +966500000000
+    Follow @flutter_dev #Flutter
+  ''',
+  onLinkTap: (link) => launchUrl(Uri.parse(link.text)),
+  onEmailTap: (email) => launchUrl(Uri.parse('mailto:${email.text}')),
+  onMentionTap: (mention) => print('User: ${mention.userId}'),
+)
+```
+
+### Editor Widget
+
+Full-featured rich text editor with interactive element support:
+
+```dart
+import 'package:super_interactive_text/super_interactive_text.dart';
+
+SuperInteractiveTextEditor(
+  initialText: 'Hello @world! Check out #Flutter',
+  autoDetect: true,
+  showToolbar: true,
+  onChanged: (text) => print('Text changed: $text'),
+  onLinkTap: (url) => launchUrl(Uri.parse(url)),
+  onMentionTap: (username) => navigateToUser(username),
+)
+```
+
+## Preview Widget
+
+### Basic Usage
+
+```dart
+SuperInteractiveTextPreview(
+  text: 'Visit https://example.com or email support@example.com',
+)
+```
+
+### Custom Styling
+
+```dart
+SuperInteractiveTextPreview(
+  text: 'Your text here...',
+  linkTextStyle: TextStyle(
+    color: Colors.purple,
+    decoration: TextDecoration.underline,
+  ),
+  emailTextStyle: TextStyle(color: Colors.orange),
+  mentionTextStyle: TextStyle(
+    color: Colors.blue,
+    fontWeight: FontWeight.bold,
+  ),
+)
+```
+
+### Builder Pattern
+
+For complete customization of how each element is rendered:
+
+```dart
+SuperInteractiveTextPreview.builder(
+  text: 'Check @flutter and https://flutter.dev',
+  linkBuilder: (link) => Container(
+    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    decoration: BoxDecoration(
+      color: Colors.blue.shade100,
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.link, size: 14),
+        SizedBox(width: 4),
+        Text(Uri.parse(link.text).host),
+      ],
+    ),
+  ),
+  usernameBuilder: (mention) => Chip(
+    avatar: Icon(Icons.person, size: 16),
+    label: Text(mention.text),
+  ),
+)
+```
+
+### Theme Support
+
+```dart
+SuperInteractiveTextPreview(
+  text: 'Your text...',
+  textPreviewTheme: SuperInteractiveTextPreviewTheme(
+    linkColor: Color(0xFF6750A4),
+    emailColor: Color(0xFF0091EA),
+    phoneColor: Color(0xFF00C853),
+    mentionColor: Color(0xFF2196F3),
+    hashtagColor: Color(0xFF9C27B0),
+  ),
+)
+
+// Or use presets
+SuperInteractiveTextPreviewTheme.light()
+SuperInteractiveTextPreviewTheme.dark()
+```
+
+## Editor Widget
+
+### Basic Editor
+
+```dart
+SuperInteractiveTextEditor(
+  initialText: 'Start typing...',
+  autoDetect: true,
+  showToolbar: true,
+)
+```
+
+### With Controller
+
+```dart
+class MyWidget extends StatefulWidget {
+  @override
+  State<MyWidget> createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends State<MyWidget> {
+  late final InteractiveEditorController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = InteractiveEditorController(
+      initialText: 'Hello World!',
+      autoDetect: true,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SuperInteractiveTextPreview(
-      text: '''
-        Visit our website at https://example.com
-        Or email us at support@example.com
-        Call us at +966599999999
-        Follow @official_account
-        #flutter #development
-      ''',
+    return Column(
+      children: [
+        SuperInteractiveTextEditor(
+          controller: _controller,
+          showToolbar: true,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            // Insert a mention programmatically
+            _controller.insertMention('flutter_dev');
+          },
+          child: Text('Add Mention'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            // Get the text content
+            print(_controller.text);
+
+            // Export as JSON
+            print(_controller.exportAsJson());
+          },
+          child: Text('Export'),
+        ),
+      ],
     );
   }
 }
 ```
 
-## Customization
+### Controller API
 
 ```dart
-SuperInteractiveTextPreview(
-  text: 'Text containing various data...',
-  linkTextStyle: TextStyle(
-    color: Colors.blue,
-    fontWeight: FontWeight.bold,
-    decoration: TextDecoration.underline,
-  ),
-  emailTextStyle: TextStyle(
-    color: Colors.orange,
-    fontStyle: FontStyle.italic,
-  ),
-  onLinkTap: (linkData) => print('Link tapped: ${linkData.text}'),
-  onEmailTap: (emailData) => print('Email tapped: ${emailData.text}'),
+final controller = InteractiveEditorController();
+
+// Insert interactive elements
+controller.insertLink('https://flutter.dev', displayText: 'Flutter');
+controller.insertMention('username');
+controller.insertHashtag('flutter');
+controller.insertEmail('user@example.com');
+controller.insertPhone('+966500000000');
+
+// Formatting
+controller.toggleBold();
+controller.toggleItalic();
+controller.toggleUnderline();
+
+// Get content
+String plainText = controller.text;
+Map<String, dynamic> json = controller.exportAsJson();
+
+// Set content
+controller.setText('New content');
+controller.clear();
+```
+
+### Custom Toolbar
+
+```dart
+SuperInteractiveTextEditor(
+  controller: controller,
+  showToolbar: true,
+  toolbarPosition: ToolbarPosition.bottom, // or ToolbarPosition.top
 )
 ```
 
-## Builder Pattern
+### Editor with Suggestions
 
 ```dart
-SuperInteractiveTextPreview.builder(
-  text: 'Text with full customization...',
-  linkBuilder: (linkData) => Container(
-    padding: EdgeInsets.all(4),
-    decoration: BoxDecoration(
-      color: Colors.blue[100],
-      borderRadius: BorderRadius.circular(4),
-    ),
-    child: Text('🔗 ${linkData.text}'),
-  ),
+SuperInteractiveTextEditor(
+  initialText: '',
+  mentionSuggestions: ['flutter', 'dart', 'google'],
+  hashtagSuggestions: ['flutter', 'mobile', 'development'],
 )
 ```
 
-## Flexible Routing System
+## Internal Routing
 
-The library allows defining a custom routing system for your application, enabling the recognition of internal links and executing custom actions when tapped (e.g., navigating to a specific screen within the app).
+Configure custom routes for your application:
 
-### 1. Configuration
-
-The parser must be configured before use, preferably in the `main` function:
+### Configuration
 
 ```dart
 void main() {
   SuperInteractiveTextDataParser.configure(
     RouteConfig(
-      // Base addresses to be considered as internal links
       baseAddresses: ['https://myapp.com', 'myapp://'],
       routes: [
-        // Define routes here
+        RouteDefinition(
+          name: 'user-profile',
+          pattern: r'users/([^/]+)',
+          parameterNames: {'userId': true},
+          onNavigate: (context, data) {
+            Navigator.pushNamed(
+              context,
+              '/user/${data.pathParameters['userId']}',
+            );
+          },
+        ),
+        RouteDefinition(
+          name: 'settings',
+          pattern: r'settings$',
+          parameterNames: {},
+          onNavigate: (context, data) {
+            Navigator.pushNamed(context, '/settings');
+          },
+        ),
       ],
     ),
   );
-  
+
   runApp(MyApp());
 }
 ```
 
-### 2. Route Definitions
+### Route Patterns
 
-Each route is defined using `RouteDefinition`. Here are some common examples:
+| Pattern | Matches | Parameters |
+|---------|---------|------------|
+| `r'settings$'` | `/settings` | None |
+| `r'users/([^/]+)'` | `/users/123` | `userId: '123'` |
+| `r'posts/([^/]+)/comments/([^/]+)'` | `/posts/1/comments/5` | `postId: '1', commentId: '5'` |
 
-#### A. Static Route
-A route with no parameters.
-Example: `https://myapp.com/settings`
+## API Reference
 
-```dart
-RouteDefinition(
-  name: 'settings',
-  pattern: r'settings$', // Regex pattern
-  parameterNames: {}, // No parameters
-  onNavigate: (context, data) {
-    Navigator.pushNamed(context, '/settings');
-  },
-)
-```
+### Data Classes
 
-#### B. Single Parameter Route
-A route containing an ID or parameter.
-Example: `https://myapp.com/users/123`
+| Class | Description |
+|-------|-------------|
+| `NormalTextData` | Regular text |
+| `LinkTextData` | HTTP/HTTPS URLs |
+| `EmailTextData` | Email addresses |
+| `PhoneNumberTextData` | Phone numbers |
+| `UsernameTextData` | @mentions |
+| `HashtagTextData` | #hashtags |
+| `SocialMediaTextData` | Social media links |
+| `RouteTextData` | Internal app routes |
 
-```dart
-RouteDefinition(
-  name: 'user-profile',
-  pattern: r'users/([^/]+)', // ([^/]+) captures any text until the next slash
-  parameterNames: {'userId': true}, // Define parameter name and requirement
-  onNavigate: (context, data) {
-    // Access the parameter via data.pathParameters
-    final userId = data.pathParameters['userId'];
-    Navigator.pushNamed(context, '/users', arguments: userId);
-  },
-)
-```
-
-#### C. Multi-Parameter Route
-A route containing multiple parameters.
-Example: `https://myapp.com/shop/10/item/55`
-
-```dart
-RouteDefinition(
-  name: 'shop-item',
-  pattern: r'shop/([^/]+)/item/([^/]+)', // Capture two parameters
-  parameterNames: {
-    'shopId': true,
-    'itemId': true,
-  },
-  onNavigate: (context, data) {
-    final shopId = data.pathParameters['shopId'];
-    final itemId = data.pathParameters['itemId'];
-    Navigator.pushNamed(
-      context, 
-      '/shop/item', 
-      arguments: {'shop': shopId, 'item': itemId},
-    );
-  },
-)
-```
-
-### 3. How to Write Patterns
-
-We use Regular Expressions (Regex) to define the route pattern:
-- `^` and `$` are added automatically, so there is no need to write them at the start and end of the full pattern, but it is preferred to use `$` for the end of the route if you want an exact match.
-- `([^/]+)` is the most commonly used pattern to capture a parameter value (meaning: any string of characters not containing `/`).
-- `\d+` can be used if you want to capture numbers only.
-
-Examples:
-- `r'contact-us$'` matches `.../contact-us`
-- `r'docs/([^/]+)/([^/]+)'` matches `.../docs/section/page`
-
-For more information on writing patterns, refer to [Dart RegExp documentation](https://api.dart.dev/stable/dart-core/RegExp-class.html).
-
-## API
-
-### TextData Classes
-
-- **NormalTextData**: Regular text with no special formatting.
-- **LinkTextData**: URLs (HTTP/HTTPS).
-- **EmailTextData**: Email addresses.
-- **PhoneNumberTextData**: Phone numbers.
-- **UsernameTextData**: Usernames (@username).
-- **SocialMediaTextData**: Social media links.
-- **HashtagTextData**: Hashtags (#hashtag).
-- **RouteTextData**: Internal app routes.
-
-### SuperInteractiveTextPreview Properties
+### Preview Properties
 
 | Property | Type | Description |
-|---------|-------|-------|
-| `text` | `String?` | The text to process. |
-| `parsedText` | `List<TextData>?` | Pre-processed text data. |
-| `textPreviewTheme` | `TextPreviewTheme?` | Appearance customization. |
-| `onLinkTap` | `Function(LinkTextData)?` | Callback for link tap. |
-| `onEmailTap` | `Function(EmailTextData)?` | Callback for email tap. |
-| `onPhoneTap` | `Function(PhoneNumberTextData)?` | Callback for phone number tap. |
-| `onUsernameTap` | `Function(UsernameTextData)?` | Callback for username tap. |
-| `onHashtagTap` | `Function(HashtagTextData)?` | Callback for hashtag tap. |
-| `onRouteTap` | `Function(RouteTextData)?` | Callback for internal route tap. |
+|----------|------|-------------|
+| `text` | `String?` | Text to parse |
+| `parsedText` | `List<SuperInteractiveTextData>?` | Pre-parsed data |
+| `textPreviewTheme` | `SuperInteractiveTextPreviewTheme?` | Theme configuration |
+| `onLinkTap` | `Function(LinkTextData)?` | Link tap callback |
+| `onEmailTap` | `Function(EmailTextData)?` | Email tap callback |
+| `onPhoneTap` | `Function(PhoneNumberTextData)?` | Phone tap callback |
+| `onUsernameTap` | `Function(UsernameTextData)?` | Mention tap callback |
+| `onHashtagTap` | `Function(HashtagTextData)?` | Hashtag tap callback |
+| `onRouteTap` | `Function(RouteTextData)?` | Route tap callback |
+
+### Editor Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `controller` | `InteractiveEditorController?` | Editor controller |
+| `initialText` | `String?` | Initial text content |
+| `autoDetect` | `bool` | Auto-detect elements (default: true) |
+| `showToolbar` | `bool` | Show formatting toolbar (default: true) |
+| `toolbarPosition` | `ToolbarPosition` | Toolbar position |
+| `readOnly` | `bool` | Read-only mode |
+| `onChanged` | `ValueChanged<String>?` | Text change callback |
+| `mentionSuggestions` | `List<String>?` | Mention suggestions |
+| `hashtagSuggestions` | `List<String>?` | Hashtag suggestions |
+
+## Migration from v1.x
+
+The preview functionality remains unchanged. Simply update your dependency version:
+
+```yaml
+# Before
+super_interactive_text: ^1.1.0
+
+# After
+super_interactive_text: ^2.0.0
+```
+
+To use the new editor, import and use `SuperInteractiveTextEditor`:
+
+```dart
+// v1.x - Preview only
+SuperInteractiveTextPreview(text: 'Hello @world')
+
+// v2.0 - Editor (new)
+SuperInteractiveTextEditor(
+  initialText: 'Hello @world',
+  autoDetect: true,
+)
+```
+
+## Examples
+
+See the [example](example/) directory for complete examples:
+
+- Basic preview usage
+- Custom styling
+- Builder pattern
+- Editor with toolbar
+- Controller usage
+- Internal routing
+
+## Contributing
+
+Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) before submitting a pull request.
+
+## License
+
+MIT License - see the [LICENSE](LICENSE) file for details.
