@@ -12,6 +12,14 @@ class SuperInteractiveTextPreview extends StatelessWidget {
   final TextStyle? socialMediaTextStyle;
   final TextStyle? hashtagTextStyle;
   final TextStyle? routeTextStyle;
+
+  // Highlight properties
+  final String? highlightText;
+  final Color? highlightColor;
+  final Color? highlightTextColor;
+  final TextStyle? highlightTextStyle;
+  final bool caseSensitiveHighlight;
+
   final void Function(LinkTextData linkTextData)? onLinkTap;
   final void Function(EmailTextData emailTextData)? onEmailTap;
   final void Function(PhoneNumberTextData phoneNumberTextData)? onPhoneTap;
@@ -48,6 +56,11 @@ class SuperInteractiveTextPreview extends StatelessWidget {
     this.socialMediaTextStyle,
     this.hashtagTextStyle,
     this.routeTextStyle,
+    this.highlightText,
+    this.highlightColor,
+    this.highlightTextColor,
+    this.highlightTextStyle,
+    this.caseSensitiveHighlight = false,
     this.onLinkTap,
     this.onEmailTap,
     this.onPhoneTap,
@@ -103,6 +116,11 @@ class SuperInteractiveTextPreview extends StatelessWidget {
     this.socialMediaTextStyle,
     this.hashtagTextStyle,
     this.routeTextStyle,
+    this.highlightText,
+    this.highlightColor,
+    this.highlightTextColor,
+    this.highlightTextStyle,
+    this.caseSensitiveHighlight = false,
     this.textPreviewTheme,
   }) : assert(
           text != null || parsedText != null,
@@ -394,6 +412,78 @@ class SuperInteractiveTextPreview extends StatelessWidget {
     }
   }
 
+  /// Build highlighted text spans by splitting text at highlight matches
+  List<TextSpan> _buildHighlightedTextSpans({
+    required String text,
+    required TextStyle baseStyle,
+    required SuperInteractiveTextPreviewTheme textPreviewTheme,
+    GestureRecognizer? recognizer,
+  }) {
+    if (highlightText == null || highlightText!.isEmpty) {
+      return [
+        TextSpan(
+          text: text,
+          style: baseStyle,
+          recognizer: recognizer,
+        )
+      ];
+    }
+
+    final List<TextSpan> spans = [];
+    final String searchText =
+        caseSensitiveHighlight ? text : text.toLowerCase();
+    final String searchPattern =
+        caseSensitiveHighlight ? highlightText! : highlightText!.toLowerCase();
+
+    int start = 0;
+    int index = searchText.indexOf(searchPattern, start);
+
+    // Get highlight style
+    final effectiveHighlightStyle = highlightTextStyle ??
+        textPreviewTheme.highlightTextStyle ??
+        baseStyle.copyWith(
+          backgroundColor:
+              highlightColor ?? textPreviewTheme.highlightColor ?? Colors.yellow,
+          color: highlightTextColor ??
+              textPreviewTheme.highlightTextColor ??
+              baseStyle.color,
+        );
+
+    while (index != -1) {
+      // Add text before the match
+      if (index > start) {
+        spans.add(TextSpan(
+          text: text.substring(start, index),
+          style: baseStyle,
+          recognizer: recognizer,
+        ));
+      }
+
+      // Add the highlighted match
+      spans.add(TextSpan(
+        text: text.substring(index, index + highlightText!.length),
+        style: effectiveHighlightStyle,
+        recognizer: recognizer,
+      ));
+
+      start = index + highlightText!.length;
+      index = searchText.indexOf(searchPattern, start);
+    }
+
+    // Add remaining text after last match
+    if (start < text.length) {
+      spans.add(TextSpan(
+        text: text.substring(start),
+        style: baseStyle,
+        recognizer: recognizer,
+      ));
+    }
+
+    return spans.isEmpty
+        ? [TextSpan(text: text, style: baseStyle, recognizer: recognizer)]
+        : spans;
+  }
+
   /// Build TextSpan for each data type
   TextSpan _buildTextSpan(
     SuperInteractiveTextData data,
@@ -404,120 +494,156 @@ class SuperInteractiveTextPreview extends StatelessWidget {
   ) {
     switch (data.runtimeType) {
       case NormalTextData:
+        final style = normalTextStyle ??
+            textPreviewTheme.normalTextStyle ??
+            defaultStyle;
         return TextSpan(
-          text: data.text,
-          style: normalTextStyle ??
-              textPreviewTheme.normalTextStyle ??
-              defaultStyle,
+          children: _buildHighlightedTextSpans(
+            text: data.text,
+            baseStyle: style,
+            textPreviewTheme: textPreviewTheme,
+          ),
         );
 
       case LinkTextData:
+        final style = linkTextStyle ??
+            textPreviewTheme.linkTextStyle ??
+            defaultStyle.copyWith(
+              color: textPreviewTheme.linkColor ?? theme.primaryColor,
+              decoration: TextDecoration.underline,
+              decorationColor:
+                  textPreviewTheme.linkColor ?? theme.primaryColor,
+            );
         return TextSpan(
-          text: data.text,
-          style: linkTextStyle ??
-              textPreviewTheme.linkTextStyle ??
-              defaultStyle.copyWith(
-                color: textPreviewTheme.linkColor ?? theme.primaryColor,
-                decoration: TextDecoration.underline,
-                decorationColor:
-                    textPreviewTheme.linkColor ?? theme.primaryColor,
-              ),
-          recognizer: TapGestureRecognizer()
-            ..onTap = () => _handleLinkTap(data as LinkTextData),
+          children: _buildHighlightedTextSpans(
+            text: data.text,
+            baseStyle: style,
+            textPreviewTheme: textPreviewTheme,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () => _handleLinkTap(data as LinkTextData),
+          ),
         );
 
       case EmailTextData:
+        final style = emailTextStyle ??
+            textPreviewTheme.emailTextStyle ??
+            defaultStyle.copyWith(
+              color:
+                  textPreviewTheme.emailColor ?? theme.colorScheme.secondary,
+              decoration: TextDecoration.underline,
+              decorationColor:
+                  textPreviewTheme.emailColor ?? theme.colorScheme.secondary,
+            );
         return TextSpan(
-          text: data.text,
-          style: emailTextStyle ??
-              textPreviewTheme.emailTextStyle ??
-              defaultStyle.copyWith(
-                color:
-                    textPreviewTheme.emailColor ?? theme.colorScheme.secondary,
-                decoration: TextDecoration.underline,
-                decorationColor:
-                    textPreviewTheme.emailColor ?? theme.colorScheme.secondary,
-              ),
-          recognizer: TapGestureRecognizer()
-            ..onTap = () => _handleEmailTap(data as EmailTextData),
+          children: _buildHighlightedTextSpans(
+            text: data.text,
+            baseStyle: style,
+            textPreviewTheme: textPreviewTheme,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () => _handleEmailTap(data as EmailTextData),
+          ),
         );
 
       case PhoneNumberTextData:
+        final style = phoneTextStyle ??
+            textPreviewTheme.phoneTextStyle ??
+            defaultStyle.copyWith(
+              color: textPreviewTheme.phoneColor ?? Colors.green,
+              decoration: TextDecoration.underline,
+              decorationColor: textPreviewTheme.phoneColor ?? Colors.green,
+            );
         return TextSpan(
-          text: data.text,
-          style: phoneTextStyle ??
-              textPreviewTheme.phoneTextStyle ??
-              defaultStyle.copyWith(
-                color: textPreviewTheme.phoneColor ?? Colors.green,
-                decoration: TextDecoration.underline,
-                decorationColor: textPreviewTheme.phoneColor ?? Colors.green,
-              ),
-          recognizer: TapGestureRecognizer()
-            ..onTap = () => _handlePhoneTap(data as PhoneNumberTextData),
+          children: _buildHighlightedTextSpans(
+            text: data.text,
+            baseStyle: style,
+            textPreviewTheme: textPreviewTheme,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () => _handlePhoneTap(data as PhoneNumberTextData),
+          ),
         );
 
       case UsernameTextData:
+        final style = usernameTextStyle ??
+            textPreviewTheme.usernameTextStyle ??
+            defaultStyle.copyWith(
+              color: textPreviewTheme.usernameColor ?? Colors.blue,
+              fontWeight: FontWeight.bold,
+            );
         return TextSpan(
-          text: data.text,
-          style: usernameTextStyle ??
-              textPreviewTheme.usernameTextStyle ??
-              defaultStyle.copyWith(
-                color: textPreviewTheme.usernameColor ?? Colors.blue,
-                fontWeight: FontWeight.bold,
-              ),
-          recognizer: TapGestureRecognizer()
-            ..onTap = () => _handleUsernameTap(data as UsernameTextData),
+          children: _buildHighlightedTextSpans(
+            text: data.text,
+            baseStyle: style,
+            textPreviewTheme: textPreviewTheme,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () => _handleUsernameTap(data as UsernameTextData),
+          ),
         );
 
       case SocialMediaTextData:
         final socialData = data as SocialMediaTextData;
+        final style = socialMediaTextStyle ??
+            textPreviewTheme.socialMediaTextStyle ??
+            defaultStyle.copyWith(
+              color: textPreviewTheme.primaryColor ??
+                  _getSocialMediaColor(socialData.type),
+              fontWeight: FontWeight.w600,
+              decoration: TextDecoration.underline,
+            );
         return TextSpan(
-          text: socialData.text,
-          style: socialMediaTextStyle ??
-              textPreviewTheme.socialMediaTextStyle ??
-              defaultStyle.copyWith(
-                color: textPreviewTheme.primaryColor ??
-                    _getSocialMediaColor(socialData.type),
-                fontWeight: FontWeight.w600,
-                decoration: TextDecoration.underline,
-              ),
-          recognizer: TapGestureRecognizer()
-            ..onTap = () => _handleSocialMediaTap(socialData),
+          children: _buildHighlightedTextSpans(
+            text: socialData.text,
+            baseStyle: style,
+            textPreviewTheme: textPreviewTheme,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () => _handleSocialMediaTap(socialData),
+          ),
         );
 
       case HashtagTextData:
+        final style = hashtagTextStyle ??
+            textPreviewTheme.hashtagTextStyle ??
+            defaultStyle.copyWith(
+              color: textPreviewTheme.hashtagColor ?? Colors.blue,
+              fontWeight: FontWeight.bold,
+            );
         return TextSpan(
-          text: data.text,
-          style: hashtagTextStyle ??
-              textPreviewTheme.hashtagTextStyle ??
-              defaultStyle.copyWith(
-                color: textPreviewTheme.hashtagColor ?? Colors.blue,
-                fontWeight: FontWeight.bold,
-              ),
-          recognizer: TapGestureRecognizer()
-            ..onTap = () => _handleHashtagTap(data as HashtagTextData),
+          children: _buildHighlightedTextSpans(
+            text: data.text,
+            baseStyle: style,
+            textPreviewTheme: textPreviewTheme,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () => _handleHashtagTap(data as HashtagTextData),
+          ),
         );
 
       case RouteTextData:
         final routeData = data as RouteTextData;
+        final style = routeTextStyle ??
+            textPreviewTheme.routeTextStyle ??
+            defaultStyle.copyWith(
+              color: textPreviewTheme.routeColor ?? Colors.purple,
+              decoration: TextDecoration.underline,
+            );
         return TextSpan(
-          text: routeData.text,
-          style: routeTextStyle ??
-              textPreviewTheme.routeTextStyle ??
-              defaultStyle.copyWith(
-                color: textPreviewTheme.routeColor ?? Colors.purple,
-                decoration: TextDecoration.underline,
-              ),
-          recognizer: TapGestureRecognizer()
-            ..onTap = () => _handleRouteTap(context, routeData),
+          children: _buildHighlightedTextSpans(
+            text: routeData.text,
+            baseStyle: style,
+            textPreviewTheme: textPreviewTheme,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () => _handleRouteTap(context, routeData),
+          ),
         );
 
       default:
+        final style = normalTextStyle ??
+            textPreviewTheme.normalTextStyle ??
+            defaultStyle;
         return TextSpan(
-          text: data.text,
-          style: normalTextStyle ??
-              textPreviewTheme.normalTextStyle ??
-              defaultStyle,
+          children: _buildHighlightedTextSpans(
+            text: data.text,
+            baseStyle: style,
+            textPreviewTheme: textPreviewTheme,
+          ),
         );
     }
   }

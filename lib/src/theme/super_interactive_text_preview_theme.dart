@@ -93,6 +93,16 @@ class SuperInteractiveTextPreviewTheme {
   /// Route text color
   final Color? routeColor;
 
+  // Highlight colors
+  /// Highlight background color for search matches
+  final Color? highlightColor;
+
+  /// Highlight text color for search matches
+  final Color? highlightTextColor;
+
+  /// Highlight text style for search matches
+  final TextStyle? highlightTextStyle;
+
   // Enhanced features colors
   /// Hover color for enhanced preview
   final Color? hoverColor;
@@ -177,6 +187,9 @@ class SuperInteractiveTextPreviewTheme {
     this.usernameColor,
     this.hashtagColor,
     this.routeColor,
+    this.highlightColor,
+    this.highlightTextColor,
+    this.highlightTextStyle,
     this.hoverColor,
     this.primaryColor,
     this.secondaryColor,
@@ -214,6 +227,12 @@ class SuperInteractiveTextPreviewTheme {
           usernameColor: const Color(0xFF2196F3),
           hashtagColor: const Color(0xFF2196F3),
           routeColor: const Color(0xFF9C27B0),
+          highlightColor: const Color(0xFFFFEB3B),
+          highlightTextColor: const Color(0xFF000000),
+          highlightTextStyle: const TextStyle(
+            backgroundColor: Color(0xFFFFEB3B),
+            color: Color(0xFF000000),
+          ),
           hoverColor: const Color(0xFF974EE9),
           primaryColor: const Color(0xFF974EE9),
           secondaryColor: const Color(0xFF2196F3),
@@ -316,6 +335,12 @@ class SuperInteractiveTextPreviewTheme {
           usernameColor: const Color(0xFF64B5F6),
           hashtagColor: const Color(0xFF64B5F6),
           routeColor: const Color(0xFFBA68C8),
+          highlightColor: const Color(0xFF1B5E20),
+          highlightTextColor: const Color(0xFFFFFFFF),
+          highlightTextStyle: const TextStyle(
+            backgroundColor: Color(0xFF1B5E20),
+            color: Color(0xFFFFFFFF),
+          ),
           hoverColor: const Color(0xFF974EE9),
           primaryColor: const Color(0xFF974EE9),
           secondaryColor: const Color(0xFF64B5F6),
@@ -429,6 +454,9 @@ class SuperInteractiveTextPreviewTheme {
     Color? usernameColor,
     Color? hashtagColor,
     Color? routeColor,
+    Color? highlightColor,
+    Color? highlightTextColor,
+    TextStyle? highlightTextStyle,
     Color? hoverColor,
     Color? primaryColor,
     Color? secondaryColor,
@@ -472,6 +500,9 @@ class SuperInteractiveTextPreviewTheme {
       usernameColor: usernameColor ?? this.usernameColor,
       hashtagColor: hashtagColor ?? this.hashtagColor,
       routeColor: routeColor ?? this.routeColor,
+      highlightColor: highlightColor ?? this.highlightColor,
+      highlightTextColor: highlightTextColor ?? this.highlightTextColor,
+      highlightTextStyle: highlightTextStyle ?? this.highlightTextStyle,
       hoverColor: hoverColor ?? this.hoverColor,
       primaryColor: primaryColor ?? this.primaryColor,
       secondaryColor: secondaryColor ?? this.secondaryColor,
@@ -543,6 +574,11 @@ class SuperInteractiveTextPreviewTheme {
       usernameColor: Color.lerp(a.usernameColor, b.usernameColor, t),
       hashtagColor: Color.lerp(a.hashtagColor, b.hashtagColor, t),
       routeColor: Color.lerp(a.routeColor, b.routeColor, t),
+      highlightColor: Color.lerp(a.highlightColor, b.highlightColor, t),
+      highlightTextColor:
+          Color.lerp(a.highlightTextColor, b.highlightTextColor, t),
+      highlightTextStyle:
+          TextStyle.lerp(a.highlightTextStyle, b.highlightTextStyle, t),
       hoverColor: Color.lerp(a.hoverColor, b.hoverColor, t),
       primaryColor: Color.lerp(a.primaryColor, b.primaryColor, t),
       secondaryColor: Color.lerp(a.secondaryColor, b.secondaryColor, t),
@@ -601,6 +637,9 @@ class SuperInteractiveTextPreviewTheme {
       usernameColor: other.usernameColor,
       hashtagColor: other.hashtagColor,
       routeColor: other.routeColor,
+      highlightColor: other.highlightColor,
+      highlightTextColor: other.highlightTextColor,
+      highlightTextStyle: other.highlightTextStyle,
       hoverColor: other.hoverColor,
       primaryColor: other.primaryColor,
       secondaryColor: other.secondaryColor,
@@ -649,6 +688,9 @@ class SuperInteractiveTextPreviewTheme {
         other.usernameColor == usernameColor &&
         other.hashtagColor == hashtagColor &&
         other.routeColor == routeColor &&
+        other.highlightColor == highlightColor &&
+        other.highlightTextColor == highlightTextColor &&
+        other.highlightTextStyle == highlightTextStyle &&
         other.hoverColor == hoverColor &&
         other.primaryColor == primaryColor &&
         other.secondaryColor == secondaryColor &&
@@ -694,6 +736,9 @@ class SuperInteractiveTextPreviewTheme {
         usernameColor,
         hashtagColor,
         routeColor,
+        highlightColor,
+        highlightTextColor,
+        highlightTextStyle,
         hoverColor,
         primaryColor,
         secondaryColor,
