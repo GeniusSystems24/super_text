@@ -17,6 +17,7 @@ A powerful Flutter package for parsing, displaying, and editing text with intera
 - **Hashtag Detection**: Tags starting with #
 - **Social Media Detection**: Instagram, Twitter, Facebook, YouTube, LinkedIn, TikTok, WhatsApp, Telegram
 - **Internal Routes**: Custom app route patterns with parameter extraction
+- **Text Highlighting**: Highlight matching text with customizable background color
 - **Serialization**: Convert to/from Map for storage
 
 ### Editor (New in v2.0)
@@ -147,6 +148,42 @@ SuperInteractiveTextPreview(
 SuperInteractiveTextPreviewTheme.light()
 SuperInteractiveTextPreviewTheme.dark()
 ```
+
+### Text Highlighting
+
+Highlight specific text within the content (useful for search results):
+
+```dart
+SuperInteractiveTextPreview(
+  text: 'Search results for flutter development tutorials',
+  highlightText: 'flutter',
+  highlightColor: Colors.yellow,
+  highlightTextColor: Colors.black,
+)
+```
+
+With custom style:
+
+```dart
+SuperInteractiveTextPreview(
+  text: 'Find all matches in this text',
+  highlightText: 'match',
+  highlightTextStyle: TextStyle(
+    backgroundColor: Color(0xFF1B5E20),
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+  ),
+  caseSensitiveHighlight: false, // Case-insensitive (default)
+)
+```
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `highlightText` | `String?` | Text to highlight |
+| `highlightColor` | `Color?` | Background color for highlights |
+| `highlightTextColor` | `Color?` | Text color for highlights |
+| `highlightTextStyle` | `TextStyle?` | Full style for highlighted text |
+| `caseSensitiveHighlight` | `bool` | Case-sensitive matching (default: false) |
 
 ## Editor Widget
 
@@ -338,6 +375,11 @@ void main() {
 | `onUsernameTap` | `Function(UsernameTextData)?` | Mention tap callback |
 | `onHashtagTap` | `Function(HashtagTextData)?` | Hashtag tap callback |
 | `onRouteTap` | `Function(RouteTextData)?` | Route tap callback |
+| `highlightText` | `String?` | Text to highlight |
+| `highlightColor` | `Color?` | Highlight background color |
+| `highlightTextColor` | `Color?` | Highlight text color |
+| `highlightTextStyle` | `TextStyle?` | Full highlight style |
+| `caseSensitiveHighlight` | `bool` | Case-sensitive matching (default: false) |
 
 ### Editor Properties
 
@@ -385,6 +427,7 @@ See the [example](example/) directory for complete examples:
 - Basic preview usage
 - Custom styling
 - Builder pattern
+- Text highlighting
 - Editor with toolbar
 - Controller usage
 - Internal routing

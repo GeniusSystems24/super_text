@@ -7,6 +7,7 @@ import 'screens/preview/custom_styling_screen.dart';
 import 'screens/preview/builder_pattern_screen.dart';
 import 'screens/preview/theming_screen.dart';
 import 'screens/preview/routing_screen.dart';
+import 'screens/preview/highlight_text_screen.dart';
 import 'screens/editor/basic_editor_screen.dart';
 import 'screens/editor/editor_with_controller_screen.dart';
 import 'screens/editor/editor_features_screen.dart';
@@ -86,6 +87,7 @@ class SuperInteractiveTextExampleApp extends StatelessWidget {
         '/preview/builder': (context) => const BuilderPatternScreen(),
         '/preview/theming': (context) => const ThemingScreen(),
         '/preview/routing': (context) => const RoutingScreen(),
+        '/preview/highlight': (context) => const HighlightTextScreen(),
         // Editor screens
         '/editor/basic': (context) => const BasicEditorScreen(),
         '/editor/controller': (context) => const EditorWithControllerScreen(),

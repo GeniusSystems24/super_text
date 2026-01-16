@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-01-16
+
+### Added
+- **Text Highlighting**: New `highlightText` feature in `SuperInteractiveTextPreview`
+  - `highlightText` parameter to specify text to highlight
+  - `highlightColor` for background color customization
+  - `highlightTextColor` for text color customization
+  - `highlightTextStyle` for full style control
+  - `caseSensitiveHighlight` option for case-sensitive matching
+- **Theme Support**: Added highlight properties to `SuperInteractiveTextPreviewTheme`
+  - `highlightColor` - default highlight background color
+  - `highlightTextColor` - default highlight text color
+  - `highlightTextStyle` - default highlight text style
+  - Light theme default: Yellow background (#FFEB3B) with black text
+  - Dark theme default: Dark green background (#1B5E20) with white text
+
+### Example
+```dart
+SuperInteractiveTextPreview(
+  text: 'Search results for flutter development',
+  highlightText: 'flutter',
+  highlightColor: Colors.yellow,
+)
+```
+
 ## [2.0.0] - 2026-01-05
 
 ### Added
